@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XoX Guild Activity Reports (Server 469)</title>
+    <style>
+        /* CSS: 디자인 및 레이아웃 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9; /* 배경색 */
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff; /* 컨테이너 배경색 */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        header {
+            text-align: center;
+            border-bottom: 3px solid #007bff; /* 포인트 색상 */
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: #007bff;
+            font-size: 2.5em;
+            margin: 0;
+        }
+        header p {
+            font-size: 1.1em;
+            color: #666;
+        }
+        .section-title {
+            color: #333;
+            font-size: 1.6em;
+            border-left: 5px solid #007bff;
+            padding-left: 15px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        .reports-list {
+            list-style: none;
+            padding: 0;
+        }
+        .reports-list li {
+            background-color: #f9f9f9;
+            margin-bottom: 8px;
+            padding: 12px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .reports-list li:hover {
+            background-color: #e9e9ff;
+        }
+        .reports-list a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: bold;
+            display: block;
+        }
+        .reports-list a::before {
+            content: "📅 "; /* 이모지 아이콘 */
+            margin-right: 10px;
+        }
+        .guidelines a {
+            color: #28a745;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .guidelines a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+            font-size: 0.9em;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>XoX Guild Activity Reports</h1>
+            <p>Server 469 Performance and Contribution Archive</p>
+        </header>
+
+        <h2 class="section-title">Essential Information</h2>
+        <div class="guidelines">
+            <p>Access the core documents and rules for the XoX Guild here:</p>
+            <ul>
+                <li><a href="guidelines/XoX%20Guild%20Welcome%20&%20Rules.html">XoX Guild Welcome & Rules</a></li>
+            </ul>
+        </div>
+
+        <h2 class="section-title">Weekly Member Activity Reports</h2>
+        <p>Click on the links below to view detailed statistical tables for guild member activity each week.</p>
+        
+        <ul class="reports-list" id="weeklyReportsList">
+            <li><a href="weekly%20reports/activity_20251201_7days.html">Weekly Report: 2025-12-01 ~ 2025-12-07</a></li>
+            <li><a href="weekly%20reports/activity_20251124_7days.html">Weekly Report: 2025-11-24 ~ 2025-11-30</a></li>
+            <li><a href="weekly%20reports/activity_20251117_7days.html">Weekly Report: 2025-11-17 ~ 2025-11-23</a></li>
+            <li><a href="weekly%20reports/activity_20251110_7days.html">Weekly Report: 2025-11-10 ~ 2025-11-16</a></li>
+            <li><a href="weekly%20reports/activity_20251103_7days.html">Weekly Report: 2025-11-03 ~ 2025-11-09</a></li>
+            <li><a href="weekly%20reports/activity_20251027_7days.html">Weekly Report: 2025-10-27 ~ 2025-11-02</a></li>
+            <li><a href="weekly%20reports/activity_20251020_7days.html">Weekly Report: 2025-10-20 ~ 2025-10-26</a></li>
+            <li><a href="weekly%20reports/activity_20251013_7days.html">Weekly Report: 2025-10-13 ~ 2025-10-19</a></li>
+            <li><a href="weekly%20reports/activity_20251006_7days.html">Weekly Report: 2025-10-06 ~ 2025-10-12</a></li>
+            <li><a href="weekly%20reports/activity_20250929_7days.html">Weekly Report: 2025-09-29 ~ 2025-10-05</a></li>
+            <li><a href="weekly%20reports/activity_20250922_7days.html">Weekly Report: 2025-09-22 ~ 2025-09-28</a></li>
+            <li><a href="weekly%20reports/activity_20250915_7days.html">Weekly Report: 2025-09-15 ~ 2025-09-21</a></li>
+            <li><a href="weekly%20reports/activity_20250908_7days.html">Weekly Report: 2025-09-08 ~ 2025-09-14</a></li>
+            <li><a href="weekly%20reports/activity_20250901_7days.html">Weekly Report: 2025-09-01 ~ 2025-09-07</a></li>
+            <li><a href="weekly%20reports/activity_20250825_7days.html">Weekly Report: 2025-08-25 ~ 2025-08-31</a></li>
+        </ul>
+
+        <h2 class="section-title">Other Reports (e.g., AOC Data)</h2>
+        <div class="aoc-reports">
+            <p>Access specialized or temporary activity logs:</p>
+            <ul>
+                <li><a href="aoc%20reports/activity_20251210_4days.csv">AOC Activity Data (2025-12-10, 4 days)</a></li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>Powered by GitHub Pages and Codespaces | XoX Guild Server 469</p>
+        </footer>
+    </div>
+</body>
+</html>

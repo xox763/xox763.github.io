@@ -1,0 +1,455 @@
+<html><head>
+
+
+    <base target="_top">
+    <meta charset="UTF-8">
+    <style>
+      body {
+          font-family: sans-serif;
+          margin: 10px;
+          background-color: #f4f4f4;
+          color: #333;
+          padding-top: 20px;
+          padding-bottom: 20px;
+      }
+      .report-wrapper {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .report-header { margin-bottom: 20px; }
+      .report-title { text-align: center; font-size: 24px; color: #2c3e50; }
+      .report-info {
+          display: flex;
+          justify-content: flex-start;
+          margin-bottom: 20px;
+      }
+      .report-info tr:nth-child(even) {
+        background-color: #f2eecf !important;
+      }
+      .report-info table {
+          width: auto;
+          border: 1px solid #ddd;
+          border-collapse: collapse;
+      }
+      .report-info td {
+          padding: 5px 10px;
+          text-align: left;
+          border: 1px solid #ddd;
+          background-color: #f2ead9;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 14px;
+      }
+      thead th, tfoot td {
+          background-color: #3783af;
+          color: white;
+          padding: 5px 10px;
+          border: 1px solid #2d6a8a;
+      }
+      tbody tr:nth-child(even) {
+          background-color: #f2f2f2;
+      }
+      td {
+          padding: 5px 10px;
+          border: 1px solid #ddd;
+          text-align: center;
+      }
+      td:first-child { text-align: left; }
+
+      .sort-icon {
+        display: inline-block;
+        margin-left: 12px;
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid #ccc;
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.2s;
+      }
+      th:hover .sort-icon {
+        opacity: 1;
+        cursor: pointer;
+      }
+      th.sorted .sort-icon {
+        opacity: 1;
+      }
+      th.asc .sort-icon {
+        border-bottom-color: #333;
+        transform: rotate(0deg);
+      }
+      th.desc .sort-icon {
+        border-bottom-color: #333;
+        transform: rotate(180deg);
+      }
+
+      .eval-zero { color: red; background-color: #ffd2d260; }
+      .eval-very-low { color: red; background-color: #ffd2d260; }
+      .eval-low { background-color: #ffd2d238; }
+      .eval-active {}
+      .eval-super-active { background-color: #cfeecfA0; color: #1a5e1a; font-weight: bold; }
+
+      .report-comment {
+        width: 100%;
+        margin-top: 16px;
+        padding: 4px;
+        border-radius: 6px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        font-family: sans-serif;
+        font-size: 13px;
+      }
+      .report-comment ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .report-comment li {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+        line-height: 1.2;
+        color: #555;
+      }
+      .report-comment li:last-child {
+        border-bottom: none;
+      }
+
+      button {
+        background-color: #485c83;
+        color: white;
+        padding: 8px 13px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .button-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+      }
+
+      .hidden-column {
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+
+        .report-comment {
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+
+        .report-data {
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+
+        .report-header {
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+
+        .report-title {
+          text-align: center;
+        }
+      }
+    </style>
+</head>
+<body>
+  
+
+  <script>
+    const valueRegex = /(?:^\-?$)|^([+-]?\d+)(?:,(\d{3}))*(\.\d*)?(K|M|B|T)?(?:(\/)([+-]?\d+)(?:,(\d{3}))*(\.\d*)?(K|M|B|T)?)?$/;
+
+    function parseNullable(value, unit) {
+      if (value != null && value !== '') {
+        const a= parseFloat(value) * unit;
+        return a;
+      }
+      return null;
+    }
+
+    function parseValue(value) {
+      const matches = value.match(valueRegex);
+      const idx = matches.indexOf('/');
+      const unit = [1, 1];
+      if (matches) {
+        matches.forEach((str, i) => {
+          const uidx = (idx === -1 || i < idx) ? 0 : 1;
+          if (str === 'K')
+            [unit[uidx], matches[i]] = [1000, ''];
+          else if (str === 'M')
+            [unit[uidx], matches[i]] = [1000000, ''];
+          else if (str === 'B')
+            [unit[uidx], matches[i]] = [1000000000, ''];
+          else if (str === 'T')
+            [unit[uidx], matches[i]] = [1000000000000, ''];
+        })
+        if (idx === -1)
+          return parseNullable(matches.slice(1).join(''), unit[0]);
+        return [parseNullable(matches.slice(1, idx).join(''), unit[0]), parseNullable(matches.slice(idx + 1).join(''), unit[1])];
+      }
+    }
+
+    function compval(a, b, isAsc) {
+      if (a === b)
+        return 0;
+      if (a === null)
+        return 1;
+      else if (b === null)
+        return -1;
+      return isAsc ? (a - b) : (b - a);
+    }
+
+    function compareNumericValues(a, b, isAsc) {
+      let va = parseValue(a);
+      let vb = parseValue(b);
+      if (Array.isArray(va) && Array.isArray(vb)) {
+        let fc = compval(va[0], vb[0], isAsc);
+        if (!fc)
+          fc = compval(va[1], vb[1], isAsc);
+        return fc;
+      } else {
+        va = Array.isArray(va) ? va[0] : va;
+        vb = Array.isArray(vb) ? vb[0] : vb;
+      }
+      return compval(va, vb, isAsc);
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if ((event.keyCode === 86 || event.key === 'v' || event.key === 'V')
+        && event.ctrlKey && event.shiftKey && event.altKey) {
+        event.preventDefault();
+        
+        const hiddenCols = document.querySelectorAll('.hidden-column');
+        const isHidden = hiddenCols[0].style.display === 'none' || getComputedStyle(hiddenCols[0]).display === 'none';
+        hiddenCols.forEach(col => {
+          col.style.display = isHidden ? 'table-cell' : 'none';
+        });
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const table = document.getElementById('dataTable');
+      const sortableHeaders = document.querySelectorAll('div#dataTable > table > thead > tr > th[data-column]');
+      sortableHeaders.forEach(header => header.classList.add('sortable'));
+      const tbody = table.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      let sortDirection = {};
+
+      sortableHeaders.forEach(header => {
+        const sortButton = header.querySelector('span.sort-icon');
+        sortButton.addEventListener('click', () => {
+          const column = parseInt(header.dataset.column);
+          
+          sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+          const direction = sortDirection[column];
+          const isAsc = direction === 'asc';
+          const isNumeric = header.dataset.type !== 'text';
+          const nthchild = `td:nth-child(${column + 1})`;
+
+          sortableHeaders.forEach(header => header.classList.remove('sorted', 'asc', 'desc'));
+          header.classList.add('sorted', direction);
+
+          rows.sort((a, b) => {
+            const aValue = a.querySelector(nthchild).textContent;
+            const bValue = b.querySelector(nthchild).textContent;
+            
+            let compareResult;
+            if (isNumeric) {
+              compareResult = compareNumericValues(aValue, bValue, isAsc);
+            } else {
+              compareResult = aValue.localeCompare(bValue);
+              if (!isAsc)
+                compareResult = -compareResult;
+            }
+
+            return compareResult;
+          });
+          
+          rows.forEach(row => tbody.appendChild(row));
+        });
+      });
+    });
+  </script>
+  
+  <div class="report-wrapper">
+    <div class="report-header">
+      <h1 class="report-title">Activity Report for XoX Server 469</h1>
+    </div>
+
+    <div class="report-info">
+      <table>
+        
+            <tbody><tr>
+              <td>Start Date (Inclusive)</td>
+              <td>2025-11-10</td>
+            </tr>
+          
+            <tr>
+              <td>End Date (Exclusive)</td>
+              <td>2025-11-17</td>
+            </tr>
+          
+            <tr>
+              <td>Duration</td>
+              <td>7 days</td>
+            </tr>
+          
+            <tr>
+              <td>File Name</td>
+              <td>activity_20251110_7days.html</td>
+            </tr>
+          
+            <tr>
+              <td>Final Guild Prestige Forecast</td>
+              <td>62</td>
+            </tr>
+                </tbody></table>
+    </div>
+
+    <div class="report-data" id="dataTable">
+      <table>
+        <thead>
+          
+              <tr>
+                <th rowspan="2" data-type="text" data-column="0" class="sortable">Name <span class="sort-icon"></span></th><th rowspan="2" data-type="numeric" data-column="1" class="sortable">Days <span class="sort-icon"></span></th><th colspan="4">Daily Activities</th><th>GW</th><th colspan="2">Clash of Worlds</th><th colspan="4">Raid</th><th colspan="2" class="hidden-column">Evaluation &amp; Rewards</th>
+              </tr>
+            
+              <tr>
+                <th data-type="numeric" data-column="2" class="sortable">Titanite <span class="sort-icon"></span></th><th data-type="numeric" data-column="3" class="sortable">Activity <span class="sort-icon"></span></th><th data-type="numeric" data-column="4" class="sortable">Guild Prestige <span class="sort-icon"></span></th><th data-type="numeric" data-column="5" class="sortable">Adventure <span class="sort-icon"></span></th><th data-type="numeric" data-column="6" class="sortable">Guild War <span class="sort-icon"></span></th><th data-type="numeric" data-column="7" class="sortable">Hero <span class="sort-icon"></span></th><th data-type="numeric" data-column="8" class="sortable">Titan <span class="sort-icon"></span></th><th data-type="numeric" data-column="9" class="sortable">Minions <span class="sort-icon"></span></th><th data-type="numeric" data-column="10" class="sortable">Morale <span class="sort-icon"></span></th><th data-type="numeric" data-column="11" class="sortable">Boss <span class="sort-icon"></span></th><th data-type="numeric" data-column="12" class="sortable">Damage <span class="sort-icon"></span></th><th data-type="numeric" data-column="13" class="hidden-column sortable">Evaluation Index <span class="sort-icon"></span></th><th data-type="numeric" data-column="14" class="hidden-column sortable">Present <span class="sort-icon"></span></th>
+              </tr>
+                    </thead>
+        <tbody>
+          
+              <tr>
+                <td>Ahmir</td><td>4</td><td>403</td><td>13.9K</td><td>12.5K</td><td>4</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="eval-low hidden-column">28.8</td><td class="hidden-column">2</td>
+              </tr>
+            
+              <tr>
+                <td>Anophelus</td><td>7</td><td>6,605</td><td>60K</td><td>33.3K</td><td>24</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>176.5M</td><td class="eval-super-active hidden-column">183.7</td><td class="hidden-column">5</td>
+              </tr>
+            
+              <tr>
+                <td>APH</td><td>7</td><td>525</td><td>20.7K</td><td>12.1K</td><td class="eval-zero">0</td><td class="eval-zero">0/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>650</td><td>5</td><td>5.3M</td><td class="eval-low hidden-column">21.1</td><td class="hidden-column">0</td>
+              </tr>
+            
+              <tr>
+                <td>BOWMORE</td><td>7</td><td>1,785</td><td>22.8K</td><td>30.2K</td><td>25</td><td>-</td><td>3</td><td>2</td><td>9</td><td>645</td><td>5</td><td>57.4M</td><td class="eval-active hidden-column">94.7</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Esi Gorg</td><td>7</td><td>1,156</td><td>14.6K</td><td>29.1K</td><td>24</td><td>8/10</td><td>5</td><td>4</td><td>9</td><td>650</td><td>5</td><td>31.5M</td><td class="eval-active hidden-column">108.1</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Flydman</td><td>7</td><td>2,768</td><td>43.4K</td><td>20.2K</td><td>2</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>334</td><td>5</td><td>1.3M</td><td class="eval-active hidden-column">58.9</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Ihg</td><td>7</td><td>2,967</td><td>81.1K</td><td>32.7K</td><td>24</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>28.5M</td><td class="eval-active hidden-column">145.5</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Ismapack</td><td>7</td><td>2,871</td><td>41.2K</td><td>26K</td><td>21</td><td>10/10</td><td>1</td><td class="eval-zero">0</td><td>9</td><td>650</td><td>5</td><td>21.7M</td><td class="eval-active hidden-column">102.5</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Joe Black</td><td>7</td><td>1,332</td><td>25.4K</td><td>26K</td><td>24</td><td>6/10</td><td class="eval-zero">0</td><td>2</td><td>9</td><td>490</td><td>5</td><td>22M</td><td class="eval-active hidden-column">80.9</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Kajrilisar</td><td>7</td><td>2,625</td><td>30.2K</td><td>27K</td><td>12</td><td>9/10</td><td class="eval-zero">0</td><td>2</td><td>9</td><td>410</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-active hidden-column">91.7</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Kolm</td><td>7</td><td>1,171</td><td>30.7K</td><td>25.3K</td><td>20</td><td>6/10</td><td>3</td><td>2</td><td>9</td><td>650</td><td>5</td><td>19.4M</td><td class="eval-active hidden-column">91.1</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>lULU</td><td>7</td><td>2,056</td><td>23.4K</td><td>26.2K</td><td>25</td><td>6/10</td><td>3</td><td>3</td><td>9</td><td>650</td><td>5</td><td>20.2M</td><td class="eval-active hidden-column">92.2</td><td class="hidden-column">5</td>
+              </tr>
+            
+              <tr>
+                <td>Mai.469</td><td>5</td><td>645</td><td>37.6K</td><td>15.3K</td><td>15</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="eval-active hidden-column">45.4</td><td class="hidden-column">2</td>
+              </tr>
+            
+              <tr>
+                <td>Mar</td><td>7</td><td>4,451</td><td>53.2K</td><td>32.7K</td><td>22</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>25.5M</td><td class="eval-active hidden-column">146.6</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>mo-mo</td><td>7</td><td>1,576</td><td>52.9K</td><td>32K</td><td>25</td><td>10/10</td><td>3</td><td>2</td><td>9</td><td>650</td><td>5</td><td>26.4M</td><td class="eval-active hidden-column">121</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Moto</td><td>7</td><td>525</td><td>8,815</td><td>17.9K</td><td>16</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>146</td><td>5</td><td>967.8K</td><td class="eval-active hidden-column">37.9</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Numencito</td><td>7</td><td>915</td><td>32.5K</td><td>23.7K</td><td>15</td><td>10/10</td><td>3</td><td>2</td><td>9</td><td>624</td><td>2</td><td>8.9M</td><td class="eval-active hidden-column">92.3</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Ralfda1derLIama</td><td>7</td><td>2,415</td><td>33K</td><td>27K</td><td>12</td><td>9/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>975</td><td>5</td><td>14M</td><td class="eval-active hidden-column">91.3</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Random</td><td>7</td><td>3,452</td><td>108.6K</td><td>27.4K</td><td>19</td><td>10/10</td><td>3</td><td>2</td><td>9</td><td>530</td><td>5</td><td>349.1K</td><td class="eval-active hidden-column">126.1</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Reikachan</td><td>7</td><td>2,450</td><td>18K</td><td>30.6K</td><td>28</td><td>8/10</td><td>3</td><td>2</td><td>9</td><td>650</td><td>5</td><td>4.9M</td><td class="eval-active hidden-column">102</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Sam 81</td><td>7</td><td>1,015</td><td>49.3K</td><td>29K</td><td>23</td><td>10/10</td><td>2</td><td>3</td><td>9</td><td>650</td><td>5</td><td>18.1M</td><td class="eval-active hidden-column">115</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>SodCheun</td><td>7</td><td>2,183</td><td>54.1K</td><td>27.9K</td><td>11</td><td>2/10</td><td>6</td><td>2</td><td>9</td><td>650</td><td>5</td><td>5.7M</td><td class="eval-active hidden-column">83.4</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Team Texas</td><td>7</td><td>33.6K</td><td>15.7K</td><td>27.6K</td><td>23</td><td>8/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>412M</td><td class="eval-super-active hidden-column">318.1</td><td class="hidden-column">5</td>
+              </tr>
+            
+              <tr>
+                <td>Team Veggie</td><td>7</td><td>1,349</td><td>125.9K</td><td>30.6K</td><td>15</td><td class="eval-zero">0/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>583</td><td>5</td><td>3.8M</td><td class="eval-active hidden-column">81</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>Vistro</td><td>7</td><td>1,330</td><td>23.3K</td><td>26.7K</td><td>20</td><td>-</td><td>3</td><td>2</td><td>9</td><td>598</td><td>5</td><td>517.6K</td><td class="eval-active hidden-column">80.5</td><td class="hidden-column">3</td>
+              </tr>
+            
+              <tr>
+                <td>ZED</td><td>7</td><td>1,815</td><td>23.9K</td><td>26.9K</td><td>15</td><td>4/10</td><td>3</td><td>2</td><td>9</td><td>650</td><td>5</td><td>40.4M</td><td class="eval-active hidden-column">74.8</td><td class="hidden-column">3</td>
+              </tr>
+                    </tbody>
+        <tfoot>
+          
+              <tr>
+                <td>TOTAL</td><td>177</td><td>84K</td><td>1M</td><td>675.9K</td><td>464</td><td>146/200</td><td>65</td><td>48</td><td>216</td><td>14.4K</td><td>112</td><td>945.4M</td><td class="hidden-column">2,614.7</td><td class="hidden-column">79</td>
+              </tr>
+            
+              <tr>
+                <td>AVERAGE</td><td>6.8</td><td>3,230</td><td>40.2K</td><td>26K</td><td>17.8</td><td>7.3/10</td><td>2.6</td><td>1.9</td><td>9</td><td>601.5</td><td>4.7</td><td>39.4M</td><td class="hidden-column">100.6</td><td class="hidden-column">3</td>
+              </tr>
+                    </tfoot>
+      </table>
+    </div>
+
+          <div class="report-comment">
+        <ul>
+          <li><span style="color: #ff5733;">*</span> Mehdi left on 2025-11-11 (Tuesday). Participated in a high-level adventure beyond their combat power, making progress impossible, then left the guild and even transferred to another server.</li>
+<li><span style="color: #ff5733;">*</span> Mai.469(279308214) joined on 2025-11-12 (Wednesday). </li>
+<li><span style="color: #ff5733;">*</span> Ahmir(279404254) joined on 2025-11-13 (Thursday). </li>        </ul>
+      </div>
+      </div>
+
+
+
+</body></html>

@@ -5,25 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XoX Guild Activity Reports (Server 469)</title>
     <style>
-        /* CSS: 디자인 및 레이아웃 */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9; /* 배경색 */
+            background-color: #f4f4f9;
             color: #333;
         }
         .container {
             max-width: 1000px;
             margin: 40px auto;
             padding: 30px;
-            background-color: #ffffff; /* 컨테이너 배경색 */
+            background-color: #ffffff;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
         header {
             text-align: center;
-            border-bottom: 3px solid #007bff; /* 포인트 색상 */
+            border-bottom: 3px solid #007bff;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
@@ -65,7 +64,7 @@
             display: block;
         }
         .reports-list a::before {
-            content: "📅 "; /* 이모지 아이콘 */
+            content: "📅 ";
             margin-right: 10px;
         }
         .guidelines a {
@@ -84,13 +83,28 @@
             font-size: 0.9em;
             color: #999;
         }
+        .reports-list li.feedback-record {
+            background-color: #ffe0b2;
+            border-left: 5px solid #ff9800;
+        }
+        .reports-list li.feedback-record a {
+            color: #e65100;
+            font-weight: bold;
+        }
+        .reports-list li.feedback-record a::before {
+            content: "📢 ";
+            margin-right: 10px;
+        }
+        .reports-list li a::before {
+            content: "📅 "; 
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>XoX Guild Activity Reports</h1>
-            <p>Server 469 Performance and Contribution Archive</p>
+            <p>Performance and Contribution Archive</p>
         </header>
 
         <h2 class="section-title">Essential Information</h2>
@@ -106,6 +120,7 @@
         
         <ul class="reports-list" id="weeklyReportsList">
             <li><a href="weekly%20reports/activity_20251201_7days.html">Weekly Report: 2025-12-01 ~ 2025-12-07</a></li>
+            <li class="feedback-record"><a href="feedback%20records/feedback_20251201_7days.html">Feedback Record: 2025-12-01 ~ 2025-12-07</a></li>            
             <li><a href="weekly%20reports/activity_20251124_7days.html">Weekly Report: 2025-11-24 ~ 2025-11-30</a></li>
             <li><a href="weekly%20reports/activity_20251117_7days.html">Weekly Report: 2025-11-17 ~ 2025-11-23</a></li>
             <li><a href="weekly%20reports/activity_20251110_7days.html">Weekly Report: 2025-11-10 ~ 2025-11-16</a></li>

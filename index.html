@@ -107,18 +107,17 @@
 
 <body>
   <script>
-    // Configuration
-    const config = {
-      folderPath: 'weekly reports/', // subfolder path
-      filePattern: /^(.+)_(\d{4})(\d{2})(\d{2})_(\d+)days\.html$/, // pattern: activity_YYYYMMDD_Ddays.html or feedback_YYYYMMDD_Ddays.html
-      sortOrder: 'desc' // 'asc' or 'desc'
-    };
-
     // Load file list from JSON
     let files = [];
     
+    // Configuration
+    const config = {
+      filePattern: /^(.+)_(\d{4})(\d{2})(\d{2})_(\d+)days\.html$/, // pattern: *_YYYYMMDD_Ddays.html
+      sortOrder: 'desc' // 'asc' or 'desc'
+    };
+
     // Extract date from filename
-    function extractDate(filename) {
+    function extractInfoFromName(filename) {
       const match = filename.match(config.filePattern);
       if (!match) return { filename, docType: null, startDate: null, endDate: null };
       
@@ -139,7 +138,7 @@
     function processFileList(fileList) {
       // Filter files matching the pattern and extract dates
       const processedFiles = fileList
-        .map(extractDate)
+        .map(extractInfoFromName)
         .filter(item => item !== null);
       
       // Sort by startDate, then by docType

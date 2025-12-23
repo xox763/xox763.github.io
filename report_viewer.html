@@ -1,189 +1,276 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Viewer</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-        
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        label {
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        select {
-            padding: 8px 12px;
-            font-size: 14px;
-            border: none;
-            border-radius: 4px;
-            background-color: white;
-            cursor: pointer;
-            min-width: 300px;
-        }
-        
-        select:focus {
-            outline: 2px solid #3498db;
-        }
-        
-        .viewer-container {
-            flex: 1;
-            padding: 20px;
-            background-color: #ecf0f1;
-            overflow: hidden;
-        }
-        
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: 2px solid #bdc3c7;
-            border-radius: 4px;
-            background-color: white;
-        }
-        
-        .no-selection {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: #7f8c8d;
-            font-size: 18px;
-        }
-        
-        footer {
-            background-color: #34495e;
-            color: #bdc3c7;
-            padding: 15px 20px;
-            text-align: center;
-            font-size: 12px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Viewer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+    
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    select {
+      padding: 8px 12px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+      min-width: 300px;
+    }
+    
+    select:focus {
+      outline: 2px solid #3498db;
+    }
+    
+    .viewer-container {
+      flex: 1;
+      padding: 20px;
+      background-color: #ecf0f1;
+      overflow: hidden;
+    }
+    
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 2px solid #bdc3c7;
+      border-radius: 4px;
+      background-color: white;
+    }
+    
+    .no-selection {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #7f8c8d;
+      font-size: 18px;
+    }
+    
+    footer {
+      background-color: #34495e;
+      color: #bdc3c7;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 12px;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Report Viewer</h1>
-        <div class="controls">
-            <label for="reportSelector">Select Report:</label>
-            <select id="reportSelector">
-                <option value="">-- Select a report --</option>
-            </select>
-        </div>
-    </header>
-    
-    <div class="viewer-container">
-        <div id="noSelection" class="no-selection">
-            Select a report to display it here
-        </div>
-        <iframe id="documentFrame" style="display: none;"></iframe>
+  <header>
+    <h1>Report Viewer</h1>
+    <div class="controls">
+      <label for="reportSelector">Select Report:</label>
+      <select id="reportSelector">
+        <option value="">-- Select a report --</option>
+      </select>
     </div>
+  </header>
+  
+  <div class="viewer-container">
+    <div id="noSelection" class="no-selection">
+      Select a report to display it here
+    </div>
+    <iframe id="documentFrame" style="display: none;"></iframe>
+  </div>
+  
+  <footer>
+    <p>Developed by Ihg</p>
+  </footer>
+  
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const reportCategory = urlParams.get('category');
+    const reportName = urlParams.get('name');
     
-    <footer>
-        <p>Developed by Ihg</p>
-    </footer>
+    const reportSelector = document.getElementById('reportSelector');
+    const documentFrame = document.getElementById('documentFrame');
+    const noSelection = document.getElementById('noSelection');
+    
+    // Configuration
+    const config = {
+      filePattern: /^(.+)_(\d{4})(\d{2})(\d{2})_(\d+)days\.html$/, // pattern: *_YYYYMMDD_Ddays.html
+      sortOrder: 'desc' // 'asc' or 'desc'
+    };
+    
+    // Extract date from filename
+    function extractInfoFromName(filename) {
+      const match = filename.match(config.filePattern);
+      if (!match) return { filename, docType: null, startDate: null, endDate: null };
+      
+      const [, docType, year, month, day, durationInDays] = match;
+      const startDate = new Date(year, month - 1, day);
+      const endDate = new Date(startDate.getTime() + (durationInDays - 1) * 86400000);
+      return { filename, docType, startDate, endDate };
+    }
+    
+    // Format date for display
+    function formatDate(fileObj) {
+      if (fileObj.startDate && fileObj.endDate)
+        return `${fileObj.startDate.toDateString()} ~ ${fileObj.endDate.toDateString()}`;
+      return 'Unknown Date';
+    }
 
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const reportCategory = urlParams.get('category');
-        const reportName = urlParams.get('name');
+    function toCamelCase(str) {
+      return str
+        .replace(/[^a-zA-Z0-9]*(.)/, (match, chr) => chr.toUpperCase())
+        .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => ' ' + chr.toUpperCase())
+        .replace(/([a-z]{2})([A-Z])/g, (match, p1, p2) => p1 + ' ' + p2.toUpperCase())
+        .replace(/([A-Z]{2})([a-z])([a-z])/g, (match, p1, p2, p3) => p1 + ' ' + p2.toUpperCase() + p3);
+    }
 
-        const reportSelector = document.getElementById('reportSelector');
-        const documentFrame = document.getElementById('documentFrame');
-        const noSelection = document.getElementById('noSelection');
+    function formatFilename(filename) {
+      const fileObj = extractInfoFromName(filename);
+      if (fileObj.docType && fileObj.startDate && fileObj.endDate) {
+        return `${toCamelCase(fileObj.docType)} (${formatDate(fileObj)})`;
+      }
+      // Fallback: just return filename
+      return toCamelCase(filename.replace(/\.html$/i, ''));
+    }
 
-        // Load files from JSON
-        async function loadFiles() {
-            try {
-                const response = await fetch('files.json');
-                const data = await response.json();
-                populateDropdown(data, reportCategory);
-            } catch (error) {
-                console.error('Error loading files:', error);
-                const option = document.createElement('option');
-                option.textContent = 'Failed to load file list';
-                option.disabled = true;
-                reportSelector.appendChild(option);
-            }
+    // Process and sort files
+    function processFileList(fileList) {
+      // Filter files matching the pattern and extract dates
+      const processedFiles = fileList
+        .map(extractInfoFromName)
+        .filter(item => item !== null);
+      
+      // Sort by startDate, then by docType
+      processedFiles.sort((a, b) => {
+        const order = config.sortOrder === 'desc' ? -1 : 1;
+        
+        // startDate comparison (null last)
+        const aDateNull = a.startDate === null;
+        const bDateNull = b.startDate === null;
+        if (aDateNull !== bDateNull) return aDateNull ? 1 : -1;
+        if (!aDateNull) {
+          const dateComp = order * (a.startDate - b.startDate);
+          if (dateComp !== 0) return dateComp;
         }
+        
+        // docType comparison (null last)
+        const aTypeNull = a.docType === null;
+        const bTypeNull = b.docType === null;
+        if (aTypeNull !== bTypeNull) return aTypeNull ? 1 : -1;
+        if (!aTypeNull) return a.docType.localeCompare(b.docType);
+        
+        return 0;
+      });
 
-        // Populate dropdown with files
-        function populateDropdown(data, targetCategory) {
-            // Clear existing options except first
-            reportSelector.innerHTML = '<option value="">-- Select a report --</option>';
+      return processedFiles;
+    }
 
-            // Add options for each category
-            for (const [category, {title, folderPath, files}] of Object.entries(data)) {
-                if (targetCategory && targetCategory !== category) continue;
+    // Load files from JSON
+    async function loadFiles() {
+      try {
+        const response = await fetch('files.json');
+        const data = await response.json();
+        populateDropdown(data, reportCategory);
+      } catch (error) {
+        console.error('Error loading files:', error);
+        const option = document.createElement('option');
+        option.textContent = 'Failed to load file list';
+        option.disabled = true;
+        reportSelector.appendChild(option);
+      }
+    }
+    
+    // Populate dropdown with files
+    function populateDropdown(data, targetCategory) {
+      // Clear existing options
+      reportSelector.replaceChildren();
 
-                if (files.length === 0) continue;
+      const selected = false;
+      // Add options for each category
+      for (const [category, {title, folderPath, files}] of Object.entries(data)) {
+        if (targetCategory && targetCategory !== category) continue;
+        
+        // Sort files
+        const processedFiles = processFileList(files);
 
-                // Create optgroup
-                const optgroup = document.createElement('optgroup');
-                optgroup.label = title;
-
-                // TODO: Sort files
-
-                // Add files
-                files.forEach(filename => {
-                    const option = document.createElement('option');
-                    option.value = `${folderPath}\\${filename}`;
-                    option.textContent = filename; // TODO: More descriptive names can be added here
-                    optgroup.appendChild(option);
-                });
-
-                reportSelector.appendChild(optgroup);
-            }
-        }
-
-        // Handle report selection
-        reportSelector.addEventListener('change', (e) => {
-            const selectedReport = e.target.value;
-            
-            if (selectedReport) {
-                // Show iframe, hide message
-                documentFrame.style.display = 'block';
-                noSelection.style.display = 'none';
-                
-                // Load selected report
-                documentFrame.src = selectedReport;
-            } else {
-                // Show message, hide iframe
-                documentFrame.style.display = 'none';
-                noSelection.style.display = 'flex';
-                documentFrame.src = '';
-            }
+        if (processedFiles.length === 0) continue;
+        
+        // Create optgroup
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = title;
+        
+        // Add files
+        processedFiles.forEach(fileObj => {
+          const option = document.createElement('option');
+          option.value = `${folderPath}\\${fileObj.filename}`;
+          option.textContent = formatFilename(fileObj.filename); // TODO: More descriptive names can be added here
+          if (category === targetCategory && fileObj.filename === reportName) {
+            option.selected = true;
+            selected = true;
+          }
+          optgroup.appendChild(option);
         });
+        
+        reportSelector.appendChild(optgroup);
+      }
 
-        // Initialize
-        window.addEventListener('DOMContentLoaded', loadFiles);
-    </script>
+      // Add default option if none selected
+      if (!selected) {
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = '-- Select a report --';
+        reportSelector.prepend(option);
+      }
+    }
+    
+    // Handle report selection
+    reportSelector.addEventListener('change', (e) => {
+      const selectedReport = e.target.value;
+      
+      if (selectedReport) {
+        // Show iframe, hide message
+        documentFrame.style.display = 'block';
+        noSelection.style.display = 'none';
+        
+        // Load selected report
+        documentFrame.src = selectedReport;
+      } else {
+        // Show message, hide iframe
+        documentFrame.style.display = 'none';
+        noSelection.style.display = 'flex';
+        documentFrame.src = '';
+      }
+    });
+    
+    // Initialize
+    window.addEventListener('DOMContentLoaded', loadFiles);
+  </script>
 </body>
 </html>

@@ -6,7 +6,7 @@
   <title>XoX Guild Activity Reports (Server 469)</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
       background-color: #f4f4f9;
@@ -113,7 +113,7 @@
       filePattern: /^(.+)_(\d{4})(\d{2})(\d{2})_(\d+)days\.html$/, // pattern: activity_YYYYMMDD_Ddays.html or feedback_YYYYMMDD_Ddays.html
       sortOrder: 'desc' // 'asc' or 'desc'
     };
-    
+
     // Load file list from JSON
     let files = [];
     
@@ -219,7 +219,7 @@
           // file name decoration for unknown types
           // remove .html extension for cleaner display
           // replace underscores with spaces
-          const displayName = fileObj.filename.replace('.html', '').replace(/_/g, ' ');
+          const displayName = fileObj.filename.replace(/\.html$/i, '').replace(/_/g, ' ');
           a.textContent = displayName;
         }
 
@@ -250,7 +250,7 @@
       <ul class="reports-list" id="waReportsList"></ul>
     </div>
     
-    <h2 class="section-title">Other Reports</h2>
+    <h2 class="section-title">Area of Conquest Activity Reports</h2>
     <div class="aoc-reports">
       <p>Access Area of Conquest activity logs:</p>
       <ul class="reports-list" id="aocReportsList"></ul>

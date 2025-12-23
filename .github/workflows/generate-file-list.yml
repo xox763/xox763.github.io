@@ -26,7 +26,7 @@ jobs:
             --arg gl "$(cd "guidelines" && find . -maxdepth 1 -name "*.html" -type f -printf "%f\n" | jq -R -s -c 'split("\n")[:-1]')" \
             --arg wa "$(cd "weekly reports" && find . -maxdepth 1 -name "*.html" -type f -printf "%f\n" | jq -R -s -c 'split("\n")[:-1]')" \
             --arg aoc "$(cd "aoc reports" && find . -maxdepth 1 -name "*.html" -type f -printf "%f\n" | jq -R -s -c 'split("\n")[:-1]')" \
-            '{gl: {id: "guidelines", folderPath: "guidelines", files: ($gl | fromjson)}, wa: {id: "waReportsList", folderPath: "weekly reports", files: ($wa | fromjson)}, aoc: {id: "aocReportsList", folderPath: "aoc reports", files: ($aoc | fromjson)}}' > files.json
+            '{gl: {title: "Essential Information", id: "guidelines", folderPath: "guidelines", files: ($gl | fromjson)}, wa: {title: "Weekly Member Activity Reports", id: "waReportsList", folderPath: "weekly reports", files: ($wa | fromjson)}, aoc: {title: "Area of Conquest Activity Reports", id: "aocReportsList", folderPath: "aoc reports", files: ($aoc | fromjson)}}' > files.json
           
       - name: Commit changes
         run: |

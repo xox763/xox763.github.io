@@ -173,10 +173,10 @@
       try {
         const response = await fetch('files.json');
         files = await response.json();
-        for (const [listId, fileList] of Object.entries(files)) {
+        for (const {id: listId, folderPath, files: fileList} of Object.values(files)) {
           currentListId = listId;
           try {
-            renderFileList(listId, fileList);
+            renderFileList(listId, fileList, folderPath);
           } catch (error) {
             console.error('Error render files:', error);
             document.getElementById(listId).innerHTML = '<li>Failed to render file list.</li>';
@@ -190,7 +190,7 @@
     }
     
     // Render file list
-    function renderFileList(listId, fileList) {
+    function renderFileList(listId, fileList, folderPath) {
       const listElement = document.getElementById(listId);
       if (!listElement) {
         console.error(`Element with ID ${listId} not found.`);
@@ -208,7 +208,7 @@
         const li = document.createElement('li');
         const a = document.createElement('a');
         
-        a.href = config.folderPath + fileObj.filename;
+        a.href = `${folderPath}\\${fileObj.filename}`;
         if (fileObj.docType === 'feedback') {
           li.classList.add('feedback-report');
           a.innerHTML = `Feedback Report: <span class="date">${formatDate(fileObj)}</span>`;
@@ -250,14 +250,14 @@
       <ul class="reports-list" id="waReportsList"></ul>
     </div>
     
-    <h2 class="section-title">Other Reports (e.g., AoC Data)</h2>
+    <h2 class="section-title">Other Reports</h2>
     <div class="aoc-reports">
       <p>Access Area of Conquest activity logs:</p>
       <ul class="reports-list" id="aocReportsList"></ul>
     </div>
 
     <footer>
-      <p>Made by Ihg</p>
+      <p>Developed by Ihg</p>
     </footer>
   </div>
 </body>

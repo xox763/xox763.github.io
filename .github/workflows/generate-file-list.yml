@@ -8,6 +8,9 @@ on:
       - 'weekly reports/**/*.html'
   workflow_dispatch:
 
+permissions:
+  contents: write  # 이 줄 추가!
+
 jobs:
   generate:
     runs-on: ubuntu-latest

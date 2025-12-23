@@ -1,29 +1,40 @@
 {
-  "guidelines": [
-    "test.html",
-    "XoX Guild Welcome & Rules.html"
-  ],
-  "waReportsList": [
-    "activity_20250901_7days.html",
-    "activity_20251110_7days.html",
-    "activity_20251103_7days.html",
-    "activity_20251006_7days.html",
-    "activity_20251013_7days.html",
-    "activity_20251020_7days.html",
-    "activity_20250825_7days.html",
-    "feedback_20251208_7days.html",
-    "activity_20251124_7days.html",
-    "activity_20251208_7days.html",
-    "activity_20250915_7days.html",
-    "activity_20251201_7days.html",
-    "activity_20251027_7days.html",
-    "activity_20250929_7days.html",
-    "feedback_20251201_7days.html",
-    "activity_20250908_7days.html",
-    "activity_20251117_7days.html",
-    "activity_20250922_7days.html"
-  ],
-  "aocReportsList": [
-    "activity_20251210_4days.html"
-  ]
+  "gl": {
+    "id": "guidelines",
+    "folderPath": "guidelines",
+    "files": [
+      "XoX Guild Welcome & Rules.html"
+    ]
+  },
+  "wa": {
+    "id": "waReportsList",
+    "folderPath": "weekly reports",
+    "files": [
+      "activity_20250901_7days.html",
+      "activity_20251110_7days.html",
+      "activity_20251103_7days.html",
+      "activity_20251006_7days.html",
+      "activity_20251013_7days.html",
+      "activity_20251020_7days.html",
+      "activity_20250825_7days.html",
+      "feedback_20251208_7days.html",
+      "activity_20251124_7days.html",
+      "activity_20251208_7days.html",
+      "activity_20250915_7days.html",
+      "activity_20251201_7days.html",
+      "activity_20251027_7days.html",
+      "activity_20250929_7days.html",
+      "feedback_20251201_7days.html",
+      "activity_20250908_7days.html",
+      "activity_20251117_7days.html",
+      "activity_20250922_7days.html"
+    ]
+  },
+  "aoc": {
+    "id": "aocReportsList",
+    "folderPath": "aoc reports",
+    "files": [
+      "activity_20251210_4days.html"
+    ]
+  }
 }

@@ -214,7 +214,7 @@
       // Clear existing options
       reportSelector.replaceChildren();
 
-      const selected = false;
+      let selected = false;
       // Add options for each category
       for (const [category, {title, folderPath, files}] of Object.entries(data)) {
         if (targetCategory && targetCategory !== category) continue;

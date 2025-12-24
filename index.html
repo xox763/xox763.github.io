@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XoX Guild Activity Reports (Server 469)</title>
+  <title>Guild Activity Reports</title>
   <style>
     body {
       font-family: Tahoma, Geneva, Verdana, sans-serif;
@@ -101,6 +101,51 @@
     .date {
       font-weight: normal;
       color: #555;
+    }
+
+    /* Accordion Styling */
+    .report-accordion {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .report-accordion summary {
+      padding: 15px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #f8f9fa;
+      color: #007bff;
+      outline: none;
+      list-style: none; /* Remove default arrow */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Custom Arrow Indicator */
+    .report-accordion summary::after {
+      content: '▶';
+      font-size: 0.8em;
+      transition: transform 0.3s;
+    }
+
+    .report-accordion[open] summary::after {
+      transform: rotate(90deg);
+    }
+
+    .report-accordion summary:hover {
+      background-color: #eef6ff;
+    }
+
+    /* Padding for content inside */
+    .report-accordion .wa-reports, 
+    .report-accordion .aoc-reports {
+      padding: 15px 20px;
+      border-top: 1px solid #eee;
     }
   </style>
 </head>
@@ -237,7 +282,7 @@
 
   <div class="container">
     <header>
-      <h1>XoX Guild Activity Reports</h1>
+      <h1>Guild Activity Reports</h1>
       <p>Performance and Contribution Archive</p>
     </header>
     
@@ -248,16 +293,22 @@
     </div>
     
     <h2 class="section-title">Weekly Member Activity Reports</h2>
-    <div class="wa-reports">
-      <p>Click on the links below to view detailed statistical tables for guild member activity each week.</p>
-      <ul class="reports-list" id="waReportsList"></ul>
-    </div>
+    <details class="report-accordion" open>
+      <summary>View Weekly Reports List</summary>
+      <div class="wa-reports">
+        <p>Click on the links below to view detailed statistical tables for guild member activity each week.</p>
+        <ul class="reports-list" id="waReportsList"></ul>
+      </div>
+    </details>
     
     <h2 class="section-title">Area of Conquest Activity Reports</h2>
-    <div class="aoc-reports">
-      <p>Access Area of Conquest activity logs:</p>
-      <ul class="reports-list" id="aocReportsList"></ul>
-    </div>
+    <details class="report-accordion" open>
+      <summary>View AoC Reports List</summary>
+      <div class="aoc-reports">
+        <p>Access Area of Conquest activity logs:</p>
+        <ul class="reports-list" id="aocReportsList"></ul>
+      </div>
+    </details>
 
     <footer>
       <p>Developed by Ihg</p>

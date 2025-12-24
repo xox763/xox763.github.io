@@ -166,7 +166,7 @@
       }
     </style>
 </head>
-<body>
+<body data-new-gr-c-s-check-loaded="14.1131.0" data-gr-ext-installed="">
   
 
   <script>
@@ -281,7 +281,8 @@
         }
       } else {
         columnIndex = 0;
-        operator = v => v.toLowerCase().includes(term);
+        if (term)
+          operator = v => v.toLowerCase().includes(term);
       }
 
       const rows = [...document.querySelectorAll('#dataTable tbody tr')];
@@ -298,7 +299,10 @@
             return operator(value);
           });
         } else {
-          match = operator(parseValue(row.cells[columnIndex]));
+          let value = row.cells[columnIndex];
+          if (columnIndex > 0)
+            value = parseValue(value);
+          match = operator(value);
         }
         row.classList.toggle('hidden', !match);
         someHidden ||= !match;

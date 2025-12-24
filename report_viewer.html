@@ -371,7 +371,8 @@
       const showEval = evaluationToggle.checked ? 'showEval=true' : '';
       const keyword = searchFilter.value.trim();
       const search = keyword ? `search=${encodeURIComponent(keyword)}` : '';
-      const params = [showEval, search].filter(param => param).join('&');
+      const timestamp = `_t=${new Date().getTime()}`;
+      const params = [showEval, search, timestamp].filter(param => param).join('&');
       const url = params ? `${selectedReport}?${params}` : selectedReport;
 
       documentFrame.contentWindow.location.replace(url);

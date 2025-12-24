@@ -256,7 +256,7 @@
       let columnIndex = null;
       let operator = null;
 
-      const match = term.match(searchCommandRegex);
+      const match = keyword.match(searchCommandRegex);
       if (match) {
         const column = match[1].trim();
         if (column) {
@@ -293,10 +293,11 @@
             break;
         }
       } else {
-        if (term) {
-          if (term.startsWith('@')) return; 
+        if (keyword) {
+          if (keyword.startsWith('@')) return; 
           columnIndex = 0;
-          operator = v => v.toLowerCase().includes(term);
+          const operand = keyword.toLowerCase();
+          operator = v => v.toLowerCase().includes(operand);
         }
       }
 
@@ -317,6 +318,8 @@
           let value = row.cells[columnIndex].textContent;
           if (columnIndex > 0)
             value = parseValue(value);
+          else
+            value = value.toLowerCase();
           match = operator(value);
         }
         row.classList.toggle('hidden', !match);
@@ -324,9 +327,11 @@
       });
 
       const tfoot = document.querySelector('#dataTable tfoot');
+      if (tfoot)
+        tfoot.classList.toggle('hidden', someHidden);
       const comment = document.querySelector('.report-comment');
-      tfoot.classList.toggle('hidden', someHidden);
-      comment.classList.toggle('hidden', someHidden);
+      if (comment)
+        comment.classList.toggle('hidden', someHidden);
     }
 
     let sortableHeaders = null;
@@ -342,7 +347,7 @@
         );
         if (header) return header;
       } else {
-        searchTerm = columnSpec.toLowerCase().trim();
+        searchTerm = columnSpec.trim().toLowerCase();
       }
 
       

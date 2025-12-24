@@ -145,10 +145,12 @@
 
     function toCamelCase(str) {
       return str
-        .replace(/[^a-zA-Z0-9]*(.)/, (match, chr) => chr.toUpperCase())
-        .replace(/[^a-zA-Z0-9]+(.)/g, (match, chr) => ' ' + chr.toUpperCase())
-        .replace(/([a-z]{2})([A-Z])/g, (match, p1, p2) => p1 + ' ' + p2.toUpperCase())
-        .replace(/([A-Z]{2})([a-z])([a-z])/g, (match, p1, p2, p3) => p1 + ' ' + p2.toUpperCase() + p3);
+        .replace(/[\s_]+/g, ' ') // replace underscores/spaces with single space
+        .trim()
+        .replace(/[^a-zA-Z]+([a-z])/g, (match, chr) => chr.toUpperCase())
+        .replace(/([a-z]{2})([A-Z])/g, (match, p1, p2) => p1 + ' ' + p2)
+        .replace(/([A-Z]{2})([a-z])([a-z])/g, (match, p1, p2, p3) => p1 + ' ' + p2.toUpperCase() + p3)
+        .replace(/^./, str[0].toUpperCase());
     }
 
     function formatFilename(filename) {
@@ -246,6 +248,9 @@
         const option = document.createElement('option');
         option.value = '';
         option.textContent = '-- Select a report --';
+        option.selected = true;
+        option.disabled = true;
+        option.hidden = true;
         reportSelector.prepend(option);
       }
     }
@@ -259,13 +264,17 @@
         documentFrame.style.display = 'block';
         noSelection.style.display = 'none';
         
-        // Load selected report
-        documentFrame.src = selectedReport;
+        // Load selected report without adding to history stack
+        // documentFrame.src = selectedReport; -- IGNORE --
+        documentFrame.contentWindow.location.replace(selectedReport);
       } else {
         // Show message, hide iframe
         documentFrame.style.display = 'none';
         noSelection.style.display = 'flex';
-        documentFrame.src = '';
+
+        // Reset frame without adding to history stack
+        // documentFrame.src = ''; -- IGNORE --
+        documentFrame.contentWindow.location.replace('about:blank');
       }
     });
     

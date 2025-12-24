@@ -99,6 +99,7 @@
       #dataTable td:first-child {
         white-space: nowrap;
         font-weight: bold;
+        min-width: 120px;
       }
 
       .report-comment {
@@ -171,7 +172,7 @@
       }
     </style>
 </head>
-<body data-new-gr-c-s-check-loaded="14.1131.0" data-gr-ext-installed="">
+<body>
   
 
   <script>
@@ -285,9 +286,11 @@
             break;
         }
       } else {
-        columnIndex = 0;
-        if (term)
+        if (term) {
+          if (term.startsWith('@')) return; 
+          columnIndex = 0;
           operator = v => v.toLowerCase().includes(term);
+        }
       }
 
       const rows = [...document.querySelectorAll('#dataTable tbody tr')];
@@ -336,9 +339,14 @@
       }
 
       
-      return sortableHeaders.find(th => 
-        th.textContent.toLowerCase().trim().startsWith(searchTerm) 
-      ) || null;
+      return sortableHeaders.reduce((prev, th) => {
+        const headerName = th.textContent.toLowerCase();
+        if (headerName.startsWith(searchTerm)) {
+          if (!prev || headerName.length < prev[1].length)
+            return [th, headerName];
+        }
+        return prev;
+      }, null)?.[0] || null;
     }
 
     function sort(header, order = null) {
@@ -452,133 +460,133 @@
         <tbody>
           
               <tr>
-                <td>Al Kijan</td><td>7</td><td>839</td><td>9,832</td><td>26.2K</td><td>9</td><td class="eval-zero">0/14</td><td class="eval-zero">0</td><td>2</td><td>9</td><td>550</td><td>5</td><td>927.2K</td><td class="eval-active hidden-column">52.7</td><td class="hidden-column">2</td>
+                <td>Al Kijan</td><td>7</td><td>839</td><td>9,832</td><td>26.2K</td><td>9</td><td>-</td><td class="eval-zero">0</td><td>2</td><td>9</td><td>550</td><td>5</td><td>927.2K</td><td class="eval-active hidden-column">52.7</td><td class="hidden-column">2</td>
               </tr>
             
               <tr>
-                <td>Anophelus</td><td>7</td><td>9,044</td><td>53.4K</td><td>35K</td><td>16</td><td>8/14</td><td>3</td><td>4</td><td>9</td><td>550</td><td>5</td><td>40.5M</td><td class="eval-super-active hidden-column">202.2</td><td class="hidden-column">5</td>
+                <td>Anophelus</td><td>7</td><td>9,044</td><td>53.4K</td><td>35K</td><td>16</td><td>8/10</td><td>3</td><td>4</td><td>9</td><td>550</td><td>5</td><td>40.5M</td><td class="eval-super-active hidden-column">202.2</td><td class="hidden-column">5</td>
               </tr>
             
               <tr>
-                <td>APH</td><td>7</td><td>533</td><td>21.3K</td><td>19.1K</td><td>1</td><td class="eval-zero">0/14</td><td>2</td><td>2</td><td>9</td><td>550</td><td>5</td><td>11.9M</td><td class="eval-active hidden-column">52.5</td><td class="hidden-column">2</td>
+                <td>APH</td><td>7</td><td>533</td><td>21.3K</td><td>19.1K</td><td>1</td><td>-</td><td>2</td><td>2</td><td>9</td><td>550</td><td>5</td><td>11.9M</td><td class="eval-active hidden-column">52.5</td><td class="hidden-column">2</td>
               </tr>
             
               <tr>
-                <td>BOWMORE</td><td>7</td><td>2,085</td><td>21.6K</td><td>30.6K</td><td>14</td><td>6/14</td><td>4</td><td>3</td><td>9</td><td>550</td><td>5</td><td>9M</td><td class="eval-active hidden-column">101</td><td class="hidden-column">3</td>
+                <td>BOWMORE</td><td>7</td><td>2,085</td><td>21.6K</td><td>30.6K</td><td>14</td><td>6/10</td><td>4</td><td>3</td><td>9</td><td>550</td><td>5</td><td>9M</td><td class="eval-active hidden-column">101</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Esi Gorg</td><td>7</td><td>1,155</td><td>14.3K</td><td>30K</td><td>17</td><td>10/14</td><td>4</td><td>4</td><td>9</td><td>550</td><td>5</td><td>22.3M</td><td class="eval-active hidden-column">120.9</td><td class="hidden-column">3</td>
+                <td>Esi Gorg</td><td>7</td><td>1,155</td><td>14.3K</td><td>30K</td><td>17</td><td>10/10</td><td>4</td><td>4</td><td>9</td><td>550</td><td>5</td><td>22.3M</td><td class="eval-active hidden-column">120.9</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Flydman</td><td>7</td><td>3,127</td><td>13.6K</td><td>22.7K</td><td>15</td><td class="eval-zero">0/14</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>550</td><td>5</td><td>2.2M</td><td class="eval-active hidden-column">65.5</td><td class="hidden-column">3</td>
+                <td>Flydman</td><td>7</td><td>3,127</td><td>13.6K</td><td>22.7K</td><td>15</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>550</td><td>5</td><td>2.2M</td><td class="eval-active hidden-column">65.5</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Gangsteris</td><td>7</td><td>1,035</td><td>17K</td><td>25.2K</td><td>20</td><td class="eval-zero">0/14</td><td>2</td><td>2</td><td>9</td><td>468</td><td>5</td><td>450.1K</td><td class="eval-active hidden-column">80.7</td><td class="hidden-column">3</td>
+                <td>Gangsteris</td><td>7</td><td>1,035</td><td>17K</td><td>25.2K</td><td>20</td><td>-</td><td>2</td><td>2</td><td>9</td><td>468</td><td>5</td><td>450.1K</td><td class="eval-active hidden-column">80.7</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Ihg</td><td>7</td><td>3,115</td><td>33.5K</td><td>34.2K</td><td>14</td><td>10/14</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>25.3M</td><td class="eval-active hidden-column">149.5</td><td class="hidden-column">3</td>
+                <td>Ihg</td><td>7</td><td>3,115</td><td>33.5K</td><td>34.2K</td><td>14</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>25.3M</td><td class="eval-active hidden-column">149.5</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Ismapack</td><td>7</td><td>3,439</td><td>48.9K</td><td>29.5K</td><td>1</td><td>10/14</td><td>2</td><td>2</td><td>9</td><td>550</td><td>5</td><td>12M</td><td class="eval-active hidden-column">117.8</td><td class="hidden-column">3</td>
+                <td>Ismapack</td><td>7</td><td>3,439</td><td>48.9K</td><td>29.5K</td><td>1</td><td>10/10</td><td>2</td><td>2</td><td>9</td><td>550</td><td>5</td><td>12M</td><td class="eval-active hidden-column">117.8</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Joe Black</td><td>7</td><td>1,495</td><td>24.1K</td><td>26.3K</td><td>17</td><td>10/14</td><td>6</td><td>4</td><td>9</td><td>448</td><td>5</td><td>7.1M</td><td class="eval-active hidden-column">123.9</td><td class="hidden-column">3</td>
+                <td>Joe Black</td><td>7</td><td>1,495</td><td>24.1K</td><td>26.3K</td><td>17</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>448</td><td>5</td><td>7.1M</td><td class="eval-active hidden-column">123.9</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Kajrilisar</td><td>7</td><td>3,225</td><td>24K</td><td>27.6K</td><td>9</td><td>10/14</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>2.8M</td><td class="eval-active hidden-column">116.8</td><td class="hidden-column">3</td>
+                <td>Kajrilisar</td><td>7</td><td>3,225</td><td>24K</td><td>27.6K</td><td>9</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>2.8M</td><td class="eval-active hidden-column">116.8</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Kanibalas</td><td>7</td><td>1,035</td><td>17K</td><td>25.7K</td><td>16</td><td class="eval-zero">0/14</td><td>5</td><td class="eval-zero">0</td><td>9</td><td>430</td><td>5</td><td>494K</td><td class="eval-active hidden-column">71.8</td><td class="hidden-column">3</td>
+                <td>Kanibalas</td><td>7</td><td>1,035</td><td>17K</td><td>25.7K</td><td>16</td><td>-</td><td>5</td><td class="eval-zero">0</td><td>9</td><td>430</td><td>5</td><td>494K</td><td class="eval-active hidden-column">71.8</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Kebabas</td><td>7</td><td>1,035</td><td>16.1K</td><td>25.3K</td><td>17</td><td class="eval-zero">0/14</td><td class="eval-zero">0</td><td>1</td><td>9</td><td>411</td><td>5</td><td>496.1K</td><td class="eval-active hidden-column">65.8</td><td class="hidden-column">3</td>
+                <td>Kebabas</td><td>7</td><td>1,035</td><td>16.1K</td><td>25.3K</td><td>17</td><td>-</td><td class="eval-zero">0</td><td>1</td><td>9</td><td>411</td><td>5</td><td>496.1K</td><td class="eval-active hidden-column">65.8</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Kolm</td><td>7</td><td>1,844</td><td>37.7K</td><td>30.4K</td><td>30</td><td>7/14</td><td>2</td><td>1</td><td>9</td><td>550</td><td>5</td><td>13.3M</td><td class="eval-active hidden-column">118.4</td><td class="hidden-column">3</td>
+                <td>Kolm</td><td>7</td><td>1,844</td><td>37.7K</td><td>30.4K</td><td>30</td><td>7/10</td><td>2</td><td>1</td><td>9</td><td>550</td><td>5</td><td>13.3M</td><td class="eval-active hidden-column">118.4</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>lULU</td><td>7</td><td>3,975</td><td>43.2K</td><td>26.8K</td><td>26</td><td>10/14</td><td>3</td><td>4</td><td>9</td><td>550</td><td>5</td><td>11.2M</td><td class="eval-active hidden-column">146.1</td><td class="hidden-column">3</td>
+                <td>lULU</td><td>7</td><td>3,975</td><td>43.2K</td><td>26.8K</td><td>26</td><td>10/10</td><td>3</td><td>4</td><td>9</td><td>550</td><td>5</td><td>11.2M</td><td class="eval-active hidden-column">146.1</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Mai.469</td><td>7</td><td>600</td><td>8,232</td><td>22.9K</td><td>5</td><td class="eval-zero">0/14</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-active hidden-column">30.9</td><td class="hidden-column">1</td>
+                <td>Mai.469</td><td>7</td><td>600</td><td>8,232</td><td>22.9K</td><td>5</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-active hidden-column">30.9</td><td class="hidden-column">1</td>
               </tr>
             
               <tr>
-                <td>Mar</td><td>7</td><td>4,440</td><td>40K</td><td>32.2K</td><td>23</td><td>10/14</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>13M</td><td class="eval-active hidden-column">155</td><td class="hidden-column">3</td>
+                <td>Mar</td><td>7</td><td>4,440</td><td>40K</td><td>32.2K</td><td>23</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>13M</td><td class="eval-active hidden-column">155</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>mo-mo</td><td>7</td><td>1,695</td><td>36.6K</td><td>31.6K</td><td>16</td><td>10/14</td><td>4</td><td>3</td><td>9</td><td>550</td><td>5</td><td>14.2M</td><td class="eval-active hidden-column">130.3</td><td class="hidden-column">3</td>
+                <td>mo-mo</td><td>7</td><td>1,695</td><td>36.6K</td><td>31.6K</td><td>16</td><td>10/10</td><td>4</td><td>3</td><td>9</td><td>550</td><td>5</td><td>14.2M</td><td class="eval-active hidden-column">130.3</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Moto</td><td>7</td><td>650</td><td>10.9K</td><td>21.3K</td><td>19</td><td class="eval-zero">0/14</td><td>6</td><td>4</td><td>9</td><td>448</td><td>5</td><td>2.4M</td><td class="eval-active hidden-column">83.8</td><td class="hidden-column">3</td>
+                <td>Moto</td><td>7</td><td>650</td><td>10.9K</td><td>21.3K</td><td>19</td><td>-</td><td>6</td><td>4</td><td>9</td><td>448</td><td>5</td><td>2.4M</td><td class="eval-active hidden-column">83.8</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Numencito</td><td>7</td><td>525</td><td>12.5K</td><td>21.9K</td><td>13</td><td>10/14</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>550</td><td>1</td><td>4.1M</td><td class="eval-active hidden-column">73.5</td><td class="hidden-column">3</td>
+                <td>Numencito</td><td>7</td><td>525</td><td>12.5K</td><td>21.9K</td><td>13</td><td>10/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>550</td><td>1</td><td>4.1M</td><td class="eval-active hidden-column">73.5</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Ralfda1derLlama</td><td>7</td><td>2,745</td><td>29.3K</td><td>28.6K</td><td>20</td><td>10/14</td><td>3</td><td>4</td><td>9</td><td>550</td><td>5</td><td>13.1M</td><td class="eval-active hidden-column">127.7</td><td class="hidden-column">3</td>
+                <td>Ralfda1derLlama</td><td>7</td><td>2,745</td><td>29.3K</td><td>28.6K</td><td>20</td><td>10/10</td><td>3</td><td>4</td><td>9</td><td>550</td><td>5</td><td>13.1M</td><td class="eval-active hidden-column">127.7</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Random</td><td>7</td><td>3,239</td><td>194.1K</td><td>29.2K</td><td>22</td><td>10/14</td><td>2</td><td>1</td><td>9</td><td>550</td><td>5</td><td>3.3M</td><td class="eval-super-active hidden-column">190</td><td class="hidden-column">5</td>
+                <td>Random</td><td>7</td><td>3,239</td><td>194.1K</td><td>29.2K</td><td>22</td><td>10/10</td><td>2</td><td>1</td><td>9</td><td>550</td><td>5</td><td>3.3M</td><td class="eval-super-active hidden-column">190</td><td class="hidden-column">5</td>
               </tr>
             
               <tr>
-                <td>Reikachan</td><td>7</td><td>2,450</td><td>15K</td><td>32.6K</td><td>23</td><td>8/14</td><td>1</td><td>1</td><td>9</td><td>550</td><td>5</td><td>3.1M</td><td class="eval-active hidden-column">104.7</td><td class="hidden-column">3</td>
+                <td>Reikachan</td><td>7</td><td>2,450</td><td>15K</td><td>32.6K</td><td>23</td><td>8/10</td><td>1</td><td>1</td><td>9</td><td>550</td><td>5</td><td>3.1M</td><td class="eval-active hidden-column">104.7</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Sam 81</td><td>7</td><td>1,296</td><td>98K</td><td>31.5K</td><td>14</td><td>10/14</td><td>2</td><td>4</td><td>9</td><td>550</td><td>5</td><td>23.6M</td><td class="eval-active hidden-column">139.3</td><td class="hidden-column">3</td>
+                <td>Sam 81</td><td>7</td><td>1,296</td><td>98K</td><td>31.5K</td><td>14</td><td>10/10</td><td>2</td><td>4</td><td>9</td><td>550</td><td>5</td><td>23.6M</td><td class="eval-active hidden-column">139.3</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>SodCheun</td><td>7</td><td>2,290</td><td>50.4K</td><td>27.3K</td><td>10</td><td>2/14</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>4.8M</td><td class="eval-active hidden-column">94.6</td><td class="hidden-column">3</td>
+                <td>SodCheun</td><td>7</td><td>2,290</td><td>50.4K</td><td>27.3K</td><td>10</td><td>2/10</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>4.8M</td><td class="eval-active hidden-column">94.6</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Team 2PFF</td><td>7</td><td>930</td><td>14.7K</td><td>27.3K</td><td>23</td><td>10/14</td><td>1</td><td>2</td><td>4</td><td>154</td><td>5</td><td>2.4M</td><td class="eval-active hidden-column">101.1</td><td class="hidden-column">3</td>
+                <td>Team 2PFF</td><td>7</td><td>930</td><td>14.7K</td><td>27.3K</td><td>23</td><td>10/10</td><td>1</td><td>2</td><td>4</td><td>154</td><td>5</td><td>2.4M</td><td class="eval-active hidden-column">101.1</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Team Veggie</td><td>7</td><td>1,155</td><td>43.8K</td><td>30.1K</td><td>11</td><td class="eval-zero">0/14</td><td>3</td><td>2</td><td>9</td><td>550</td><td>5</td><td>2.7M</td><td class="eval-active hidden-column">91.3</td><td class="hidden-column">3</td>
+                <td>Team Veggie</td><td>7</td><td>1,155</td><td>43.8K</td><td>30.1K</td><td>11</td><td>-</td><td>3</td><td>2</td><td>9</td><td>550</td><td>5</td><td>2.7M</td><td class="eval-active hidden-column">91.3</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Valerix</td><td>7</td><td>748</td><td>39.2K</td><td>22.1K</td><td>25</td><td class="eval-zero">0/14</td><td>1</td><td>2</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-active hidden-column">79.4</td><td class="hidden-column">3</td>
+                <td>Valerix</td><td>7</td><td>748</td><td>39.2K</td><td>22.1K</td><td>25</td><td>-</td><td>1</td><td>2</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-active hidden-column">79.4</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>Vistro</td><td>7</td><td>1,390</td><td>16K</td><td>27.2K</td><td>15</td><td>10/14</td><td>1</td><td>3</td><td>9</td><td>550</td><td>5</td><td>1.3M</td><td class="eval-active hidden-column">103.1</td><td class="hidden-column">3</td>
+                <td>Vistro</td><td>7</td><td>1,390</td><td>16K</td><td>27.2K</td><td>15</td><td>10/10</td><td>1</td><td>3</td><td>9</td><td>550</td><td>5</td><td>1.3M</td><td class="eval-active hidden-column">103.1</td><td class="hidden-column">3</td>
               </tr>
             
               <tr>
-                <td>ZED</td><td>7</td><td>1,525</td><td>16.7K</td><td>21.1K</td><td class="eval-zero">0</td><td>2/14</td><td>3</td><td>1</td><td>9</td><td>550</td><td>5</td><td>11.6M</td><td class="eval-active hidden-column">61</td><td class="hidden-column">3</td>
+                <td>ZED</td><td>7</td><td>1,525</td><td>16.7K</td><td>21.1K</td><td class="eval-zero">0</td><td>2/10</td><td>3</td><td>1</td><td>9</td><td>550</td><td>5</td><td>11.6M</td><td class="eval-active hidden-column">61</td><td class="hidden-column">3</td>
               </tr>
                     </tbody>
         <tfoot>
           
               <tr>
-                <td>TOTAL</td><td>210</td><td>62.7K</td><td>1M</td><td>821.3K</td><td>461</td><td>173/420</td><td>84</td><td>72</td><td>247</td><td>14.5K</td><td>136</td><td>259.5M</td><td class="hidden-column">3,151.3</td><td class="hidden-column">90</td>
+                <td>TOTAL</td><td>210</td><td>62.7K</td><td>1M</td><td>821.3K</td><td>461</td><td>173/200</td><td>84</td><td>72</td><td>247</td><td>14.5K</td><td>136</td><td>259.5M</td><td class="hidden-column">3,151.3</td><td class="hidden-column">90</td>
               </tr>
             
               <tr>
-                <td>AVERAGE</td><td>7</td><td>2,088.6</td><td>34K</td><td>27.4K</td><td>15.4</td><td>5.8/14</td><td>2.8</td><td>2.4</td><td>8.2</td><td>482</td><td>4.5</td><td>8.7M</td><td class="hidden-column">105</td><td class="hidden-column">3</td>
+                <td>AVERAGE</td><td>7</td><td>2,088.6</td><td>34K</td><td>27.4K</td><td>15.4</td><td>8.7/6.7</td><td>2.8</td><td>2.4</td><td>8.2</td><td>482</td><td>4.5</td><td>8.7M</td><td class="hidden-column">105</td><td class="hidden-column">3</td>
               </tr>
                     </tfoot>
       </table>
@@ -588,4 +596,4 @@
 
 
 
-</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
+</body></html>

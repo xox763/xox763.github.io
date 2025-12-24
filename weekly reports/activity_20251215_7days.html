@@ -247,11 +247,8 @@
 
     function applySearchFilter(keyword) {
       const term = keyword.toLowerCase();
-      let filterType = 'name';
-      let filterValue = term;
       let columnIndex = null;
       let operator = null;
-      let operand = null;
 
       const match = term.match(searchCommandRegex);
       if (match) {
@@ -261,6 +258,7 @@
           if (header === null) return; 
           columnIndex = parseInt(header.dataset.column);
         }
+        const operand = match[3].trim() || null;
         switch (match[2]) {
           case '<=':
             operator = v => v <= operand;
@@ -281,19 +279,23 @@
             operator = v => v == operand;
             break;
         }
-        operand = match[3].trim() || null;
+      } else {
+        columnIndex = 0;
+        operator = v => v.toLowerCase().includes(term);
       }
 
       const rows = [...document.querySelectorAll('#dataTable tbody tr')];
       let someHidden = false;
       rows.forEach(row => {
         let match = false;
-        if (columnIndex === null) {
+        if (operator === null) {
+          match = true;
+        } else if (columnIndex === null) {
           match = [...row.cells].some((cell, idx) => {
             let value = cell.textContent.trim();
             if (idx > 0)
               value = parseValue(value);
-            operator(value);
+            return operator(value);
           });
         } else {
           match = operator(parseValue(row.cells[columnIndex]));

@@ -252,9 +252,13 @@
         option.disabled = true;
         option.hidden = true;
         reportSelector.prepend(option);
+      } else {
+        // Trigger change event to load selected report
+        const event = new Event('change');
+        reportSelector.dispatchEvent(event);
       }
     }
-    
+
     // Handle report selection
     reportSelector.addEventListener('change', (e) => {
       const selectedReport = e.target.value;

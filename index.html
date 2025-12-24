@@ -5,156 +5,153 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guild Activity Reports</title>
   <style>
-    /* Color Palette variables - for English comment instruction */
-    :root {
-      --primary-color: #007bff;
-      --bg-color: #f8f9fa;
-      --container-bg: #ffffff;
-      --text-dark: #2c3e50;
-      --text-muted: #6c757d;
-      --accent-blue: #e7f1ff;
-      --accent-gold: #fcf4e7;
-      --border-color: #dee2e6;
-    }
-
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: var(--bg-color);
-      color: var(--text-dark);
+      background-color: #f4f4f9;
+      color: #333;
     }
-
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 40px auto;
-      padding: 40px;
-      background-color: var(--container-bg);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-      border-radius: 12px;
+      padding: 30px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
     }
-
     header {
       text-align: center;
-      padding-bottom: 30px;
-      margin-bottom: 40px;
-      border-bottom: 2px solid var(--accent-blue);
+      border-bottom: 3px solid #007bff;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
     }
-
     header h1 {
-      color: var(--primary-color);
+      color: #007bff;
       font-size: 2.5em;
-      font-weight: 800;
       margin: 0;
-      letter-spacing: -1px;
     }
-
     header p {
       font-size: 1.1em;
-      color: var(--text-muted);
-      margin-top: 5px;
+      color: #666;
     }
-
     .section-title {
-      color: var(--text-dark);
-      font-size: 1.4em;
-      border-left: 5px solid var(--primary-color);
+      color: #333;
+      font-size: 1.6em;
+      border-left: 5px solid #007bff;
       padding-left: 15px;
-      margin: 40px 0 20px 0;
+      /* margin-top: 40px;
+      margin-bottom: 20px; */
+    }
+    .reports-list {
+      list-style: none;
+      padding: 0;
+    }
+    .reports-list li {
+      background-color: #e9e9ff;
+      margin-bottom: 8px;
+      padding: 12px 15px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    .reports-list li:hover {
+      background-color: #a1a1e7;
+    }
+    .reports-list a {
+      text-decoration: none;
+      color: #2c3e50;
+      font-weight: bold;
+      display: block;
+    }
+    .reports-list a::before {
+      content: "📅 ";
+      margin-right: 10px;
+    }
+    .guidelines a {
+      color: #28a745;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .guidelines a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      padding: 30px 0;
+      border-top: 1px solid #eaeaea;
+      font-size: 0.85em;
+      color: #aaa;
+      letter-spacing: 1px;
+    }
+    footer strong {
+      color: #007bff;
+      font-weight: 600;
+    }
+    .reports-list li.feedback-report {
+      background-color: #eee1cd;
+      border-left: 5px solid #ff9800;
+    }
+    .reports-list li.feedback-report:hover {
+      background-color: #ebcfa5;
+    }
+    .reports-list li.feedback-report a {
+      color: #e65100;
+      font-weight: bold;
+    }
+    .reports-list li.feedback-report a::before {
+      content: "📢 ";
+      margin-right: 10px;
+    }
+    .date {
+      font-weight: normal;
+      color: #555;
     }
 
-    /* Accordion Styling - Unified Design */
+    /* Accordion Styling */
     .report-accordion {
-      border: 1px solid var(--border-color);
+      background-color: #fffbee;
+      border: 1px solid #ddd;
       border-radius: 8px;
-      margin-bottom: 16px;
-      background-color: #fff;
-      transition: all 0.2s ease;
-    }
-
-    .report-accordion[open] {
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      border-color: var(--primary-color);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease;
     }
 
     .report-accordion summary {
-      padding: 18px 20px;
-      font-weight: 600;
+      padding: 15px 20px;
+      font-weight: bold;
       cursor: pointer;
-      background-color: #fff;
-      color: var(--text-dark);
+      background-color: #e5ecc6;
+      color: #235;
+      border-left: 5px solid #007bff;
       outline: none;
-      list-style: none;
+      list-style: none; /* Remove default arrow */
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .report-accordion summary:hover {
-      background-color: var(--bg-color);
-    }
-
+    /* Custom Arrow Indicator */
     .report-accordion summary::after {
-      content: '＋'; /* Modern plus sign */
-      color: var(--primary-color);
-      font-size: 1.2em;
+      content: '▶';
+      font-size: 0.8em;
       transition: transform 0.3s;
     }
 
     .report-accordion[open] summary::after {
-      content: '－'; /* Change to minus when open */
-      transform: rotate(180deg);
+      transform: rotate(90deg);
     }
 
-    /* Reports List Styling */
-    .reports-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    .report-accordion summary:hover {
+      background-color: #eef6ff;
     }
 
-    .reports-list li {
-      background-color: var(--bg-color);
-      margin-bottom: 10px;
-      border-radius: 6px;
-      transition: transform 0.2s, background-color 0.2s;
-    }
-
-    .reports-list li:hover {
-      background-color: var(--accent-blue);
-      transform: translateX(5px);
-    }
-
-    .reports-list a {
-      text-decoration: none;
-      color: var(--text-dark);
-      padding: 14px 20px;
-      display: block;
-      font-size: 0.95em;
-    }
-
-    /* Special styling for feedback/important reports */
-    .reports-list li.feedback-report {
-      background-color: var(--accent-gold);
-    }
-
-    .reports-list li.feedback-report a {
-      color: #a67c00;
-    }
-
-    /* Footer Styling */
-    footer {
-      text-align: center;
-      margin-top: 80px;
-      padding: 30px 0;
-      border-top: 1px solid var(--border-color);
-      font-size: 0.85em;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-    }
-
-    footer strong {
-      color: var(--primary-color);
+    /* Padding for content inside */
+    .report-accordion .wa-reports, 
+    .report-accordion .aoc-reports {
+      padding: 15px 20px;
+      border-top: 1px solid #eee;
     }
   </style>
 </head>

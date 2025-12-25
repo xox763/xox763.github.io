@@ -172,7 +172,7 @@
       }
     </style>
 </head>
-<body>
+<body data-new-gr-c-s-check-loaded="14.1131.0" data-gr-ext-installed="">
   
 
   
@@ -520,27 +520,26 @@
         } else if (columnIndex > 0) {
           if (isNaN(operand))
             return; 
-          operand = parseFloat(operand);
         }
         switch (op) {
           case '<=':
-            operator = v => v <= operand;
+            operator = operand != null ? (v => v <= operand) : (v => false);
             break;
           case '>=':
-            operator = v => v >= operand;
-            break;
-          case '<>':
-            operator = v => v !== operand;
-            logic = 'every';
+            operator = operand != null ? (v => v >= operand) : (v => false);
             break;
           case '<':
-            operator = v => v < operand;
+            operator = operand != null ? (v => v < operand) : (v => false);
             break;
           case '>':
-            operator = v => v > operand;
+            operator = operand != null ? (v => v > operand) : (v => false);
             break;
           case '=':
-            operator = v => v === operand;
+            operator = operand != null ? (v => v == operand) : (v => v === null);
+            break;
+          case '<>':
+            operator = operand != null ? (v => v != operand) : (v => v !== null);
+            logic = 'every';
             break;
         }
       } else {

@@ -43,6 +43,7 @@
 
     .control-group {
       display: flex;
+      position: relative;
       align-items: center;
       gap: 10px;
     }
@@ -265,7 +266,7 @@
           • Omit column to search all columns<br>
           • Operators: &lt;=, &gt;=, &lt;, &gt;, =, &lt;&gt;<br><br>
           <strong>Examples:</strong><br>
-          • <code>@adv&lt;3</code> - Adventure less than 3<br>
+          • <code>@adv&gt;2</code> - Adventure participation count greater than 2<br>
           • <code>@=0</code> - Any column equals 0<br>
           • <code>@=-</code> - Any column with no value (shown as '-')<br><br>
           <em>Note: Currently supports single condition only</em>
@@ -353,7 +354,7 @@
     function hideTooltip() {
       hideTimeout = setTimeout(() => {
         helpTooltip.style.display = 'none';
-      }, 300); // Keep tooltip visible for 300ms after mouse leaves
+      }, 400); // Keep tooltip visible for 300ms after mouse leaves
     }
 
     helpIcon.addEventListener('mouseenter', showTooltip);

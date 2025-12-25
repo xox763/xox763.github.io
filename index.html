@@ -355,7 +355,14 @@
           document.getElementById(currentListId).innerHTML = '<li>Failed to load file list.</li>';
       }
     }
-    
+
+    // View report in iframe
+    function viewReport(category, filename) {
+      const data = { category, filename };
+      sessionStorage.setItem('viewer_params', JSON.stringify(data));
+      window.location.href = `report_viewer.html?_t=${new Date().getTime()}`;
+    }
+
     // Render file list
     function renderFileList(listId, fileList, folderPath, category) {
       const listElement = document.getElementById(listId);
@@ -371,20 +378,26 @@
       }
 
       listElement.replaceChildren();
-      const timestamp = new Date().getTime();
       processedFiles.forEach(fileObj => {
         const li = document.createElement('li');
         const a = document.createElement('a');
         
-        const href = `report_viewer.html?category=${encodeURIComponent(category)}&name=${encodeURIComponent(fileObj.filename)}&_t=${timestamp}`;
         if (fileObj.docType === 'feedback') {
-          a.href = href;
           li.classList.add('feedback-report');
+          a.href = '#';
           a.innerHTML = `Feedback Report: <span class="date">${formatDate(fileObj)}</span>`;
+          a.addEventListener('click', (e) => {
+            e.preventDefault();
+            viewReport(category, fileObj.filename);
+          });
         } else if (fileObj.docType === 'activity') {
-          a.href = href;
           li.classList.add('activity-report');
+          a.href = '#';
           a.innerHTML = `Activity Report: <span class="date">${formatDate(fileObj)}</span>`;
+          a.addEventListener('click', (e) => {
+            e.preventDefault();
+            viewReport(category, fileObj.filename);
+          });
         } else {
           a.href = `${folderPath}\\${fileObj.filename}`;
           // file name decoration for unknown types

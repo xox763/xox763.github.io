@@ -215,10 +215,6 @@
   </footer>
   
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const reportCategory = urlParams.get('category');
-    const reportName = urlParams.get('name');
-    
     const reportSelector = document.getElementById('reportSelector');
     const evaluationToggle = document.getElementById('evaluationToggle');
     const searchFilter = document.getElementById('searchFilter');
@@ -300,12 +296,43 @@
       return processedFiles;
     }
 
+    function loadFormData() {
+      const params = sessionStorage.getItem('viewer_params');
+      if (params) {
+        return JSON.parse(params);
+      }
+      return {};
+    }
+
+    function saveFormValue(key, value) {
+      const params = sessionStorage.getItem('viewer_params');
+      let data = {};
+      if (params) {
+        data = JSON.parse(params);
+      }
+      data[key] = value;
+      sessionStorage.setItem('viewer_params', JSON.stringify(data));
+    }
+
+    function applyFormData(data) {
+      if (!data) return;
+      evaluationToggle.checked = data.showEval || false;
+      const selectReportEvent = new Event('change');
+      reportSelector.value = data.pathname || '';
+      reportSelector.dispatchEvent(selectReportEvent);
+      const shwoEvalEvent = new Event('change');
+      evaluationToggle.dispatchEvent(shwoEvalEvent);
+      searchFilter.value = data.searchKeyword || '';
+      const searchEvent = new Event('input');
+      searchFilter.dispatchEvent(searchEvent);
+    }
+
     // Load files from JSON
-    async function loadFiles() {
+    async function loadCategory(category) {
       try {
         const response = await fetch('files.json');
         const data = await response.json();
-        populateDropdown(data, reportCategory);
+        populateDropdown(data, category);
       } catch (error) {
         console.error('Error loading files:', error);
         const option = document.createElement('option');
@@ -314,16 +341,16 @@
         reportSelector.appendChild(option);
       }
     }
-    
+
     // Populate dropdown with files
-    function populateDropdown(data, targetCategory) {
+    function populateDropdown(data, reportCategory) {
       // Clear existing options
       reportSelector.replaceChildren();
 
-      let selected = false;
+      let isEmpty = true;
       // Add options for each category
       for (const [category, {title, folderPath, files}] of Object.entries(data)) {
-        if (targetCategory && targetCategory !== category) continue;
+        if (reportCategory && reportCategory !== category) continue;
         
         // Sort files
         const processedFiles = processFileList(files);
@@ -339,18 +366,15 @@
           const option = document.createElement('option');
           option.value = `${folderPath}\\${fileObj.filename}`;
           option.textContent = formatFilename(fileObj.filename); // TODO: More descriptive names can be added here
-          if (category === targetCategory && fileObj.filename === reportName) {
-            option.selected = true;
-            selected = true;
-          }
           optgroup.appendChild(option);
         });
-        
+
+        isEmpty &&= processedFiles.length === 0;
         reportSelector.appendChild(optgroup);
       }
 
       // Add default option if none selected
-      if (!selected) {
+      if (isEmpty) {
         const option = document.createElement('option');
         option.value = '';
         option.textContent = '-- Select a report --';
@@ -358,40 +382,36 @@
         option.disabled = true;
         option.hidden = true;
         reportSelector.prepend(option);
-      } else {
-        // Trigger change event to load selected report
-        const event = new Event('change');
-        reportSelector.dispatchEvent(event);
       }
     }
 
-    function loadReport() {
-      const selectedReport = reportSelector.value;
-      if (!selectedReport) return;
+    function loadReport(pathname) {
+      if (!pathname) return;
       const showEval = evaluationToggle.checked ? 'showEval=true' : '';
       const keyword = searchFilter.value.trim();
       const search = keyword ? `search=${encodeURIComponent(keyword)}` : '';
       const timestamp = `_t=${new Date().getTime()}`;
       const params = [showEval, search, timestamp].filter(param => param).join('&');
-      const url = params ? `${selectedReport}?${params}` : selectedReport;
+      const url = params ? `${pathname}?${params}` : pathname;
 
       documentFrame.contentWindow.location.replace(url);
     }
 
     // Handle report selection
     reportSelector.addEventListener('change', (e) => {
-      const selectedReport = e.target.value;
-      
-      if (selectedReport) {
+      const pathname = e.target.value;
+      if (e.isTrusted)
+        saveFormValue('pathname', pathname);
+
+      if (pathname) {
         // Show iframe, hide message
         documentFrame.style.display = 'block';
         noSelection.style.display = 'none';
-        loadReport();
+        loadReport(pathname);
       } else {
         // Show message, hide iframe
         documentFrame.style.display = 'none';
         noSelection.style.display = 'flex';
-
         // Reset frame without adding to history stack
         documentFrame.contentWindow.location.replace('about:blank');
       }
@@ -400,7 +420,10 @@
     // Handle evaluation toggle
     evaluationToggle.addEventListener('change', (e) => {
       try {
-        documentFrame.contentWindow.showEvaluation(e.target.checked);
+        const showEval = e.target.checked;
+        if (e.isTrusted)
+          saveFormValue('showEval', showEval);
+        documentFrame.contentWindow.showEvaluation(showEval);
       } catch (err) {
         console.error("Access denied or function not found:", err);
       }
@@ -409,14 +432,21 @@
     // Handle search filter
     searchFilter.addEventListener('input', (e) => {
       try {
-        documentFrame.contentWindow.applySearchFilter(e.target.value.trim());
+        const searchKeyword = e.target.value.trim();
+        if (e.isTrusted)
+          saveFormValue('searchKeyword', searchKeyword);
+        documentFrame.contentWindow.applySearchFilter(searchKeyword);
       } catch (err) {
         console.error("Access denied or function not found:", err);
       }
     });
 
     // Initialize
-    window.addEventListener('DOMContentLoaded', loadFiles);
+    window.addEventListener('DOMContentLoaded', () => {
+      const data = loadFormData();
+      loadCategory(data.category);
+      applyFormData(data);
+    });
   </script>
 </body>
 </html>

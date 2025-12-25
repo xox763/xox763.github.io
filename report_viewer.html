@@ -374,7 +374,14 @@
     function applyViewerParams(params) {
       if (!params) return;
       if (params.pathname != null) {
+        reportSelector.value = params.pathname;
         loadReport(params.pathname);
+      }
+      if (params.showEval != null) {
+        evaluationToggle.checked = params.showEval;
+      }
+      if (params.searchKeyword != null) {
+        searchFilter.value = params.searchKeyword;
       }
     }
 

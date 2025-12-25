@@ -626,8 +626,10 @@
     // Initialize
     window.addEventListener('DOMContentLoaded', () => {
       const params = loadAndUpdateFormParams(config.viewerParamsName);
-      loadCategory(params.category);
-      applyViewerParams(params);
+      loadCategory(params.category).then(() => {
+        // Apply saved params after loading files
+        applyViewerParams(params);
+      });
     });
   </script>
 </body>

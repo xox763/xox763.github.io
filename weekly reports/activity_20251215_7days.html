@@ -172,7 +172,7 @@
       }
     </style>
 </head>
-<body data-new-gr-c-s-check-loaded="14.1131.0" data-gr-ext-installed="">
+<body>
   
 
   
@@ -523,22 +523,22 @@
         }
         switch (op) {
           case '<=':
-            operator = operand != null ? (v => v <= operand) : (v => false);
+            operator = operand != null ? (v => v !== null && v <= operand) : (v => false);
             break;
           case '>=':
-            operator = operand != null ? (v => v >= operand) : (v => false);
+            operator = operand != null ? (v => v !== null && v >= operand) : (v => false);
             break;
           case '<':
-            operator = operand != null ? (v => v < operand) : (v => false);
+            operator = operand != null ? (v => v !== null && v < operand) : (v => false);
             break;
           case '>':
-            operator = operand != null ? (v => v > operand) : (v => false);
+            operator = operand != null ? (v => v !== null && v > operand) : (v => false);
             break;
           case '=':
-            operator = operand != null ? (v => v == operand) : (v => v === null);
+            operator = operand != null ? (v => v !== null && v == operand) : (v => v === null);
             break;
           case '<>':
-            operator = operand != null ? (v => v != operand) : (v => v !== null);
+            operator = operand != null ? (v => v === null || v != operand) : (v => v !== null);
             logic = 'every';
             break;
         }

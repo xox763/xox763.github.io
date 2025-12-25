@@ -172,7 +172,7 @@
       }
     </style>
 </head>
-<body data-new-gr-c-s-check-loaded="14.1131.0" data-gr-ext-installed="">
+<body>
   
 
   
@@ -501,6 +501,7 @@
       const term = searchKeyword.toLowerCase();
       let columnIndex = null;
       let operator = null;
+      let logic = 'some';
 
       const match = searchKeyword.match(searchCommandRegex);
       if (match) {
@@ -515,8 +516,7 @@
         let operand = match[3].trim();
         if (!operand) return; 
         if (operand === '-') {
-          if (op !== '=' && op !== '<>')
-            operand = 0;
+          operand = null;
         } else if (columnIndex > 0) {
           if (isNaN(operand))
             return; 
@@ -530,7 +530,8 @@
             operator = v => v >= operand;
             break;
           case '<>':
-            operator = v => v != operand;
+            operator = v => v !== operand;
+            logic = 'every';
             break;
           case '<':
             operator = v => v < operand;
@@ -539,7 +540,7 @@
             operator = v => v > operand;
             break;
           case '=':
-            operator = v => v == operand;
+            operator = v => v === operand;
             break;
         }
       } else {
@@ -557,17 +558,21 @@
         if (operator == null) {
           match = true;
         } else if (columnIndex == null) {
-          match = [...row.cells].some((cell, idx) => {
+
+          match = [...row.cells][logic]((cell, idx) => {
             let value = cell.textContent;
-            if (idx > 0)
+            if (idx > 0) {
               value = parseValue(value);
+              value = Array.isArray(value) ? value[0] : value;
+            }
             return operator(value);
           });
         } else {
           let value = row.cells[columnIndex].textContent;
-          if (columnIndex > 0)
+          if (columnIndex > 0) {
             value = parseValue(value);
-          else
+            value = Array.isArray(value) ? value[0] : value;
+          } else
             value = value.toLowerCase();
           match = operator(value);
         }

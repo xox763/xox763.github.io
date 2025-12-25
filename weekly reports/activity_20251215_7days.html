@@ -34,6 +34,7 @@
           width: auto;
           border: 1px solid #ddd;
           border-collapse: collapse;
+          box-shadow: 0 0 0 2px #a8927960, 0 3px 10px rgba(139, 115, 85, 0.15);
       }
       .report-info td {
           padding: 5px 10px;
@@ -127,6 +128,14 @@
         border-bottom: none;
       }
 
+      .hidden-column {
+        display: none;
+      }
+
+      .hidden {
+        display: none;
+      }
+
       button {
         background-color: #485c83;
         color: white;
@@ -139,14 +148,6 @@
         display: flex;
         justify-content: flex-end;
         gap: 16px;
-      }
-
-      .hidden-column {
-        display: none;
-      }
-
-      .hidden {
-        display: none;
       }
 
       @media (min-width: 768px) {

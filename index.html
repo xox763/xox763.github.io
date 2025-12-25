@@ -357,8 +357,8 @@
     }
 
     // View report in iframe
-    function viewReport(category, filename) {
-      const data = { category, filename };
+    function viewReport(category, pathname) {
+      const data = { category, pathname };
       sessionStorage.setItem('viewer_params', JSON.stringify(data));
       window.location.href = `report_viewer.html?_t=${new Date().getTime()}`;
     }
@@ -379,16 +379,17 @@
 
       listElement.replaceChildren();
       processedFiles.forEach(fileObj => {
+        const pathname = `${folderPath}\\${fileObj.filename}`;
         const li = document.createElement('li');
         const a = document.createElement('a');
-        
+
         if (fileObj.docType === 'feedback') {
           li.classList.add('feedback-report');
           a.href = '#';
           a.innerHTML = `Feedback Report: <span class="date">${formatDate(fileObj)}</span>`;
           a.addEventListener('click', (e) => {
             e.preventDefault();
-            viewReport(category, fileObj.filename);
+            viewReport(category, pathname);
           });
         } else if (fileObj.docType === 'activity') {
           li.classList.add('activity-report');
@@ -396,10 +397,10 @@
           a.innerHTML = `Activity Report: <span class="date">${formatDate(fileObj)}</span>`;
           a.addEventListener('click', (e) => {
             e.preventDefault();
-            viewReport(category, fileObj.filename);
+            viewReport(category, pathname);
           });
         } else {
-          a.href = `${folderPath}\\${fileObj.filename}`;
+          a.href = pathname;
           // file name decoration for unknown types
           // remove .html extension for cleaner display
           // replace underscores with spaces

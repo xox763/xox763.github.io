@@ -316,14 +316,14 @@
 
     function applyFormData(data) {
       if (!data) return;
-      evaluationToggle.checked = data.showEval || false;
       const selectReportEvent = new Event('change');
       reportSelector.value = data.pathname || '';
       reportSelector.dispatchEvent(selectReportEvent);
       const shwoEvalEvent = new Event('change');
+      evaluationToggle.checked = data.showEval || false;
       evaluationToggle.dispatchEvent(shwoEvalEvent);
-      searchFilter.value = data.searchKeyword || '';
       const searchEvent = new Event('input');
+      searchFilter.value = data.searchKeyword || '';
       searchFilter.dispatchEvent(searchEvent);
     }
 

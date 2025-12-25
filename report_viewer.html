@@ -133,6 +133,61 @@
       color: #95a5a6;
     }
 
+    /* Help Icon & Tooltip */
+    .help-icon {
+      cursor: help;
+      color: #bdc3c7;
+      font-size: 16px;
+      font-weight: bold;
+      user-select: none;
+      transition: color 0.2s;
+    }
+
+    .help-icon:hover {
+      color: #3498db;
+    }
+
+    .help-tooltip {
+      display: none;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background: #2c3e50;
+      color: white;
+      padding: 12px 15px;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.6;
+      width: 400px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 1000;
+      text-align: left;
+    }
+
+    .help-tooltip code {
+      background: #1a252f;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #5dade2;
+    }
+
+    .help-tooltip em {
+      color: #95a5a6;
+      font-style: italic;
+    }
+
+    .help-tooltip::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      right: 10px;
+      border: 6px solid transparent;
+      border-bottom-color: #2c3e50;
+    }
+
+    /* Viewer Container */
     .viewer-container {
       flex: 1;
       padding: 20px;
@@ -156,7 +211,8 @@
       color: #7f8c8d;
       font-size: 18px;
     }
-    
+
+    /* Footer */
     footer {
       background-color: #34495e;
       color: #bdc3c7;
@@ -179,7 +235,6 @@
       <div class="control-group">
         <label for="reportSelector">Select Report:</label>
         <select id="reportSelector">
-          <option value="">-- Select a report --</option>
         </select>
       </div>
 
@@ -199,6 +254,22 @@
           class="search-input" 
           placeholder="Enter keywords to filter..."
         >
+        <span class="help-icon" title="">ⓘ</span>
+        <div class="help-tooltip">
+          <strong>Search Guide:</strong><br><br>
+          <strong>Basic Search:</strong><br>
+          • Searches the Name field (case-insensitive, partial match)<br><br>
+          <strong>Conditional Search:</strong><br>
+          • Format: <code>@[column][operator][value]</code><br>
+          • Column name can be abbreviated (e.g., "adv" for "Adventure")<br>
+          • Omit column to search all columns<br>
+          • Operators: &lt;=, &gt;=, &lt;, &gt;, =, &lt;&gt;<br><br>
+          <strong>Examples:</strong><br>
+          • <code>@adv&lt;3</code> - Adventure less than 3<br>
+          • <code>@=0</code> - Any column equals 0<br>
+          • <code>@=-</code> - Any column with no value (shown as '-')<br><br>
+          <em>Note: Currently supports single condition only</em>
+        </div>
       </div>
     </div>
   </header>
@@ -223,13 +294,76 @@
     
     // Configuration
     const config = {
-      filePattern: /^(.+)_(\d{4})(\d{2})(\d{2})_(\d+)days\.html$/, // pattern: *_YYYYMMDD_Ddays.html
-      sortOrder: 'desc' // 'asc' or 'desc'
+      reportFilePattern: /^(.+)_(\d{4})(\d{2})(\d{2})_(\d+)days\.html$/, // pattern: *_YYYYMMDD_Ddays.html
+      categorySortOrder: 'desc', // 'asc' or 'desc'
+      viewerParamsName: 'viewer_params',
     };
-    
+
+    function loadAndUpdateFormParams(itemName, updateParams = {}) {
+      const item = sessionStorage.getItem(itemName);
+      let params;
+      if (item) {
+        params = JSON.parse(item);
+      }
+      else {
+        params = {};
+      }
+
+      // Merge with default params and set flag if updated
+      let isUpdated = false;
+      for (const [key, value] of Object.entries(updateParams)) {
+        if (params[key] !== value) {
+          params[key] = value;
+          isUpdated = true;
+        }
+      }
+
+      if (isUpdated) {
+        saveFormParams(params, itemName);
+      }
+
+      return params;
+    }
+
+    function saveFormParams(params, itemName) {
+      sessionStorage.setItem(itemName, JSON.stringify(params));
+    }
+
+    function saveViewerParam(key, value) {
+      loadAndUpdateFormParams(config.viewerParamsName, {[key]: value});
+    }
+
+    function applyViewerParams(params) {
+      if (!params) return;
+      if (params.pathname != null) {
+        loadReport(params.pathname);
+      }
+    }
+
+    // Help tooltip hover functionality
+    const helpIcon = document.querySelector('.help-icon');
+    const helpTooltip = document.querySelector('.help-tooltip');
+    let hideTimeout;
+
+    function showTooltip() {
+      clearTimeout(hideTimeout);
+      helpTooltip.style.display = 'block';
+    }
+
+    function hideTooltip() {
+      hideTimeout = setTimeout(() => {
+        helpTooltip.style.display = 'none';
+      }, 300); // Keep tooltip visible for 300ms after mouse leaves
+    }
+
+    helpIcon.addEventListener('mouseenter', showTooltip);
+    helpIcon.addEventListener('mouseleave', hideTooltip);
+    helpTooltip.addEventListener('mouseenter', showTooltip);
+    helpTooltip.addEventListener('mouseleave', hideTooltip);
+
     // Extract date from filename
     function extractInfoFromName(filename) {
-      const match = filename.match(config.filePattern);
+      const match = filename.match(config.reportFilePattern);
       if (!match) return { filename, docType: null, startDate: null, endDate: null };
       
       const [, docType, year, month, day, durationInDays] = match;
@@ -273,7 +407,7 @@
       
       // Sort by startDate, then by docType
       processedFiles.sort((a, b) => {
-        const order = config.sortOrder === 'desc' ? -1 : 1;
+        const order = config.categorySortOrder === 'desc' ? -1 : 1;
         
         // startDate comparison (null last)
         const aDateNull = a.startDate === null;
@@ -294,37 +428,6 @@
       });
 
       return processedFiles;
-    }
-
-    function loadFormData() {
-      const params = sessionStorage.getItem('viewer_params');
-      if (params) {
-        return JSON.parse(params);
-      }
-      return {};
-    }
-
-    function saveFormValue(key, value) {
-      const params = sessionStorage.getItem('viewer_params');
-      let data = {};
-      if (params) {
-        data = JSON.parse(params);
-      }
-      data[key] = value;
-      sessionStorage.setItem('viewer_params', JSON.stringify(data));
-    }
-
-    function applyFormData(data) {
-      if (!data) return;
-      const selectReportEvent = new Event('change');
-      reportSelector.value = data.pathname || '';
-      reportSelector.dispatchEvent(selectReportEvent);
-      const shwoEvalEvent = new Event('change');
-      evaluationToggle.checked = data.showEval || false;
-      evaluationToggle.dispatchEvent(shwoEvalEvent);
-      const searchEvent = new Event('input');
-      searchFilter.value = data.searchKeyword || '';
-      searchFilter.dispatchEvent(searchEvent);
     }
 
     // Load files from JSON
@@ -377,7 +480,7 @@
       if (isEmpty) {
         const option = document.createElement('option');
         option.value = '';
-        option.textContent = '-- Select a report --';
+        option.textContent = '-- No reports available --';
         option.selected = true;
         option.disabled = true;
         option.hidden = true;
@@ -385,29 +488,22 @@
       }
     }
 
-    function loadReport(pathname) {
-      if (!pathname) return;
-      const showEval = evaluationToggle.checked ? 'showEval=true' : '';
-      const keyword = searchFilter.value.trim();
-      const search = keyword ? `search=${encodeURIComponent(keyword)}` : '';
-      const timestamp = `_t=${new Date().getTime()}`;
-      const params = [showEval, search, timestamp].filter(param => param).join('&');
-      const url = params ? `${pathname}?${params}` : pathname;
-
-      documentFrame.contentWindow.location.replace(url);
+    function makeUrl(pathname, params) {
+      if (!pathname) return '';
+      const query = Object.entries(params)
+        .filter(([key, value]) => value != null && value !== '')
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&');
+      return query ? `${pathname}?${query}` : pathname;
     }
 
-    // Handle report selection
-    reportSelector.addEventListener('change', (e) => {
-      const pathname = e.target.value;
-      if (e.isTrusted)
-        saveFormValue('pathname', pathname);
-
+    function loadReport(pathname) {
       if (pathname) {
         // Show iframe, hide message
         documentFrame.style.display = 'block';
         noSelection.style.display = 'none';
-        loadReport(pathname);
+        const url = makeUrl(pathname, { _t: new Date().getTime() });
+        documentFrame.contentWindow.location.replace(url);
       } else {
         // Show message, hide iframe
         documentFrame.style.display = 'none';
@@ -415,37 +511,78 @@
         // Reset frame without adding to history stack
         documentFrame.contentWindow.location.replace('about:blank');
       }
+    }
+
+    function toggleEvaluation(showEval = null, forwarded = false) {
+      try {
+        if (forwarded) {
+          if (showEval == null)
+            showEval = !evaluationToggle.checked;
+          evaluationToggle.checked = showEval;
+        }
+        if (documentFrame && documentFrame.contentWindow && typeof documentFrame.contentWindow.toggleEvaluation === 'function')
+          documentFrame.contentWindow.toggleEvaluation(showEval, forwarded);
+      } catch (err) {
+        console.error("Access denied or function not found:", err);
+      }
+    }
+
+    function applySearchFilter(searchKeyword, forwarded = false) {
+      try {
+        if (forwarded) {
+          searchFilter.value = searchKeyword;
+        }
+        if (documentFrame && documentFrame.contentWindow && typeof documentFrame.contentWindow.applySearchFilter === 'function')
+          documentFrame.contentWindow.applySearchFilter(searchKeyword, forwarded);
+      } catch (err) {
+        console.error("Access denied or function not found:", err);
+      }
+    }
+
+    function sort(header, order, forwarded = false) {
+      try {
+        if (forwarded) {
+          // No local control to update
+        }
+        if (documentFrame && documentFrame.contentWindow && typeof documentFrame.contentWindow.sort === 'function')
+          documentFrame.contentWindow.sort(header, order, forwarded);
+      } catch (err) {
+        console.error("Access denied or function not found:", err);
+      }
+    }
+
+    // Handle report selection
+    reportSelector.addEventListener('change', (e) => {
+      const pathname = e.target.value;
+      if (e.isTrusted)
+        saveViewerParam('pathname', pathname);
+
+      loadReport(pathname);
     });
 
     // Handle evaluation toggle
     evaluationToggle.addEventListener('change', (e) => {
-      try {
-        const showEval = e.target.checked;
-        if (e.isTrusted)
-          saveFormValue('showEval', showEval);
-        documentFrame.contentWindow.showEvaluation(showEval);
-      } catch (err) {
-        console.error("Access denied or function not found:", err);
-      }
+      const showEval = e.target.checked;
+      if (e.isTrusted)
+        saveViewerParam('showEval', showEval);
+
+      toggleEvaluation(showEval);
     });
 
     // Handle search filter
     searchFilter.addEventListener('input', (e) => {
-      try {
-        const searchKeyword = e.target.value.trim();
-        if (e.isTrusted)
-          saveFormValue('searchKeyword', searchKeyword);
-        documentFrame.contentWindow.applySearchFilter(searchKeyword);
-      } catch (err) {
-        console.error("Access denied or function not found:", err);
-      }
+      const searchKeyword = e.target.value.trim();
+      if (e.isTrusted)
+        saveViewerParam('searchKeyword', searchKeyword);
+
+      applySearchFilter(searchKeyword);
     });
 
     // Initialize
     window.addEventListener('DOMContentLoaded', () => {
-      const data = loadFormData();
-      loadCategory(data.category);
-      applyFormData(data);
+      const params = loadAndUpdateFormParams(config.viewerParamsName);
+      loadCategory(params.category);
+      applyViewerParams(params);
     });
   </script>
 </body>

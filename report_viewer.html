@@ -623,12 +623,18 @@
       applySearchFilter(searchKeyword);
     });
 
-    // Ctrl/Cmd + K to focus search input
     document.addEventListener('keydown', (e) => {
+      // Ctrl/Cmd + K to focus search input
       if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
         searchFilter.focus();
         searchFilter.select();
+      }
+      // Ctrl + Shift + Alt + V to toggle evaluation
+      else if ((e.keyCode === 86 || e.key === 'v' || e.key === 'V')
+        && e.ctrlKey && e.shiftKey && e.altKey) {
+        e.preventDefault();
+        toggleEvaluation(null, true);
       }
     });
 

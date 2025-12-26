@@ -170,7 +170,7 @@
       }
     </style>
 </head>
-<body data-new-gr-c-s-check-loaded="14.1131.0" data-gr-ext-installed="">
+<body>
   
 
   
@@ -204,7 +204,7 @@
           
             <tr>
               <td>Final Guild Prestige Forecast</td>
-              <td>64</td>
+              <td>67</td>
             </tr>
                 </tbody></table>
     </div>
@@ -662,11 +662,11 @@
       }
     }
 
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function(e) {
       
-      if ((event.keyCode === 86 || event.key === 'v' || event.key === 'V')
-        && event.ctrlKey && event.shiftKey && event.altKey) {
-        event.preventDefault();
+      if ((e.keyCode === 86 || e.key === 'v' || e.key === 'V')
+        && e.ctrlKey && e.shiftKey && e.altKey) {
+        e.preventDefault();
 
         if (window.parent && window.parent !== window && typeof window.parent.toggleEvaluation === 'function') {
           

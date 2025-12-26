@@ -625,11 +625,23 @@
 
     // Ctrl/Cmd + K to focus search input
     document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
         searchFilter.focus();
         searchFilter.select();
       }
+    });
+
+    // Forward keyboard shortcut to viewer from iframe
+    documentFrame.addEventListener('load', () => {
+      const doc = documentFrame.contentWindow.document;
+      doc.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+          e.preventDefault();
+          searchFilter.focus();
+          searchFilter.select();
+        }
+      });
     });
 
     // Initialize

@@ -27,13 +27,11 @@
           justify-content: flex-start;
           margin-bottom: 20px;
       }
-      .report-info tr:nth-child(even) {
-        background-color: #f2eecf !important;
-      }
       .report-info table {
           width: auto;
-          border: 1px solid #ddd;
+          border: 1px solid #f0d493;
           border-collapse: collapse;
+          box-shadow: 0 0 0 1px #f0d493, 0 3px 10px rgba(192, 170, 129, 0.2);
       }
       .report-info td {
           padding: 5px 10px;
@@ -64,7 +62,8 @@
 
       .sort-icon {
         display: inline-block;
-        margin-left: 12px;
+        margin-top: 6px;
+        margin-left: 8px;
         width: 0;
         height: 0;
         border-left: 8px solid transparent;
@@ -95,6 +94,12 @@
       .eval-active {}
       .eval-super-active { background-color: #cfeecfA0; color: #1a5e1a; font-weight: bold; }
 
+      #dataTable td:first-child {
+        white-space: nowrap;
+        font-weight: bold;
+        min-width: 120px;
+      }
+
       .report-comment {
         width: 100%;
         margin-top: 16px;
@@ -120,6 +125,14 @@
         border-bottom: none;
       }
 
+      .hidden-column {
+        display: none;
+      }
+
+      .hidden {
+        display: none;
+      }
+
       button {
         background-color: #485c83;
         color: white;
@@ -128,14 +141,28 @@
         cursor: pointer;
         font-size: 16px;
       }
+
+      button:hover {
+        background-color: #68AcA3;
+      }
+
+       
+      button:disabled {
+        background-color: #a5adba;  
+        color: #f1f1f1;             
+        cursor: not-allowed;        
+        opacity: 0.7;               
+      }
+
+       
+      button:disabled:hover {
+        background-color: #a5adba;  
+      }
+
       .button-container {
         display: flex;
         justify-content: flex-end;
         gap: 16px;
-      }
-
-      .hidden-column {
-        display: none;
       }
 
       @media (min-width: 768px) {
@@ -164,8 +191,128 @@
 <body>
   
 
+  
+  <div class="report-wrapper">
+    <div class="report-header">
+      <h1 class="report-title">Activity Report</h1>
+    </div>
+
+    <div class="report-info">
+      <table>
+                  <tbody><tr>
+            <td>Guild Name</td>
+            <td>XoX Server 469</td>
+          </tr>
+                  <tr>
+            <td>Start Date</td>
+            <td>2025-09-29</td>
+          </tr>
+                  <tr>
+            <td>End Date</td>
+            <td>2025-10-05</td>
+          </tr>
+                  <tr>
+            <td>Duration</td>
+            <td>7 days</td>
+          </tr>
+                  <tr>
+            <td>Guild Prestige Progress</td>
+            <td></td>
+          </tr>
+                  <tr>
+            <td>Estimated Final Guild Prestige</td>
+            <td></td>
+          </tr>
+                  <tr>
+            <td>File Name</td>
+            <td>activity_20250929_7days.html</td>
+          </tr>
+              </tbody></table>
+    </div>
+
+    <div class="report-data" id="dataTable">
+      <table>
+        <thead>
+          <tr><th rowspan="2" data-type="text" data-column="0" class="sortable">Name <span class="sort-icon"></span></th><th rowspan="2" data-type="numeric" data-column="1" class="sortable">Days <span class="sort-icon"></span></th><th colspan="4">Daily Activities</th><th>GW</th><th colspan="2">Clash of Worlds</th><th colspan="4">Raid</th><th colspan="2" class="hidden-column">Evaluation &amp; Rewards</th></tr><tr><th data-type="numeric" data-column="2" class="sortable">Titanite <span class="sort-icon"></span></th><th data-type="numeric" data-column="3" class="sortable">Activity <span class="sort-icon"></span></th><th data-type="numeric" data-column="4" class="sortable">Guild Prestige <span class="sort-icon"></span></th><th data-type="numeric" data-column="5" class="sortable">Adventure <span class="sort-icon"></span></th><th data-type="numeric" data-column="6" class="sortable">Guild War <span class="sort-icon"></span></th><th data-type="numeric" data-column="7" class="sortable">Hero <span class="sort-icon"></span></th><th data-type="numeric" data-column="8" class="sortable">Titan <span class="sort-icon"></span></th><th data-type="numeric" data-column="9" class="sortable">Minions <span class="sort-icon"></span></th><th data-type="numeric" data-column="10" class="sortable">Morale <span class="sort-icon"></span></th><th data-type="numeric" data-column="11" class="sortable">Boss <span class="sort-icon"></span></th><th data-type="numeric" data-column="12" class="sortable">Damage <span class="sort-icon"></span></th><th data-type="numeric" data-column="13" class="hidden-column sortable">Evaluation Index <span class="sort-icon"></span></th><th data-type="numeric" data-column="14" class="hidden-column sortable">Present <span class="sort-icon"></span></th></tr>        </thead>
+        <tbody>
+          <tr><td>Abel</td><td>7</td><td>800</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-very-low hidden-column">9.1</td><td class="hidden-column">0</td></tr><tr><td>Anophelus</td><td>7</td><td>4,703</td><td>63K</td><td>34.2K</td><td>13</td><td>8/10</td><td>3</td><td>3</td><td>9</td><td>650</td><td>5</td><td>37.2M</td><td class="eval-super-active hidden-column">187.8</td><td class="hidden-column">5</td></tr><tr><td>APH</td><td>7</td><td>450</td><td>30.6K</td><td>16.4K</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>650</td><td>5</td><td>1.7M</td><td class="eval-active hidden-column">33.6</td><td class="hidden-column">2</td></tr><tr><td>BOWMORE</td><td>7</td><td>2,104</td><td>20K</td><td>28.7K</td><td>12</td><td>-</td><td>1</td><td>3</td><td>9</td><td>382</td><td>3</td><td>1.6M</td><td class="eval-active hidden-column">101.7</td><td class="hidden-column">3</td></tr><tr><td>Bryan000</td><td>7</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero hidden-column">0</td><td class="hidden-column">0</td></tr><tr><td>BryanXXX</td><td>7</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero hidden-column">0</td><td class="hidden-column">0</td></tr><tr><td>Esi Gorg</td><td>7</td><td>1,155</td><td>33.6K</td><td>29.3K</td><td>14</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>16.3M</td><td class="eval-active hidden-column">149</td><td class="hidden-column">3</td></tr><tr><td>Flydman</td><td>7</td><td>2,391</td><td>11.2K</td><td>18.9K</td><td>3</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>8</td><td>226</td><td>4</td><td>908.3K</td><td class="eval-active hidden-column">53.2</td><td class="hidden-column">2</td></tr><tr><td>Ihg</td><td>7</td><td>2,365</td><td>31.9K</td><td>32.4K</td><td>14</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>25.8M</td><td class="eval-active hidden-column">170.3</td><td class="hidden-column">3</td></tr><tr><td>Ismapack</td><td>7</td><td>3,541</td><td>71.4K</td><td>26.5K</td><td>1</td><td>10/10</td><td>3</td><td>2</td><td>9</td><td>650</td><td>5</td><td>12.7M</td><td class="eval-active hidden-column">132.4</td><td class="hidden-column">3</td></tr><tr><td>Kajrilisar</td><td>7</td><td>2,205</td><td>30.1K</td><td>26.1K</td><td>7</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-active hidden-column">77.2</td><td class="hidden-column">0</td></tr><tr><td>killerado</td><td>7</td><td>7,365</td><td>67.2K</td><td>34.2K</td><td>14</td><td>10/10</td><td>5</td><td>3</td><td>9</td><td>650</td><td>5</td><td>90.7M</td><td class="eval-super-active hidden-column">246</td><td class="hidden-column">5</td></tr><tr><td>Kolm</td><td>7</td><td>1,433</td><td>26.3K</td><td>28.5K</td><td>13</td><td>10/10</td><td>5</td><td>1</td><td>9</td><td>598</td><td>5</td><td>21M</td><td class="eval-active hidden-column">138.5</td><td class="hidden-column">3</td></tr><tr><td>lin</td><td>7</td><td>3,449</td><td>69.6K</td><td>32.3K</td><td>15</td><td>10/10</td><td>5</td><td>4</td><td>9</td><td>650</td><td>5</td><td>37.5M</td><td class="eval-super-active hidden-column">201.4</td><td class="hidden-column">0</td></tr><tr><td>lULU</td><td>7</td><td>1,965</td><td>36.2K</td><td>28.5K</td><td>14</td><td>10/10</td><td>3</td><td>2</td><td>9</td><td>629</td><td>5</td><td>5.2M</td><td class="eval-active hidden-column">141.7</td><td class="hidden-column">3</td></tr><tr><td>Mar</td><td>7</td><td>5,088</td><td>67.7K</td><td>33.9K</td><td>13</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>14.6M</td><td class="eval-super-active hidden-column">188.9</td><td class="hidden-column">5</td></tr><tr><td>mo-mo</td><td>7</td><td>2,175</td><td>48.4K</td><td>33.6K</td><td>15</td><td>10/10</td><td>4</td><td>4</td><td>9</td><td>650</td><td>5</td><td>15.9M</td><td class="eval-active hidden-column">165.4</td><td class="hidden-column">3</td></tr><tr><td>Moto</td><td>7</td><td>825</td><td>9,868</td><td>18.7K</td><td>5</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>165</td><td>5</td><td>403.4K</td><td class="eval-active hidden-column">45.6</td><td class="hidden-column">2</td></tr><tr><td>mssunicorn</td><td>7</td><td>300</td><td>32.3K</td><td>11.1K</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-low hidden-column">29.8</td><td class="hidden-column">0</td></tr><tr><td>Numencito</td><td>7</td><td>1,110</td><td>55.4K</td><td>28.7K</td><td>14</td><td>10/10</td><td>2</td><td>4</td><td>9</td><td>650</td><td>5</td><td>9M</td><td class="eval-active hidden-column">145.9</td><td class="hidden-column">3</td></tr><tr><td>Picasky</td><td>7</td><td>2,560</td><td>64.2K</td><td>22.2K</td><td>1</td><td>4/10</td><td class="eval-zero">0</td><td>1</td><td>9</td><td>650</td><td>5</td><td>12.3M</td><td class="eval-active hidden-column">84.3</td><td class="hidden-column">3</td></tr><tr><td>Ralfda1derLlama</td><td>7</td><td>2,025</td><td>43.3K</td><td>27.5K</td><td>9</td><td>9/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>491</td><td>5</td><td>670K</td><td class="eval-active hidden-column">103.6</td><td class="hidden-column">3</td></tr><tr><td>Reikachan</td><td>7</td><td>2,510</td><td>26.3K</td><td>29.8K</td><td>12</td><td>8/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>602</td><td>5</td><td>1.8M</td><td class="eval-active hidden-column">117.2</td><td class="hidden-column">3</td></tr><tr><td>SodCheun</td><td>7</td><td>1,781</td><td>61.1K</td><td>27.9K</td><td>8</td><td>4/10</td><td>6</td><td>4</td><td>9</td><td>572</td><td>5</td><td>3.9M</td><td class="eval-active hidden-column">129.9</td><td class="hidden-column">3</td></tr><tr><td>Team MR DUTERTE</td><td>7</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero hidden-column">0</td><td class="hidden-column">0</td></tr><tr><td>Team Veggie</td><td>7</td><td>1,350</td><td>51.5K</td><td>30.1K</td><td>6</td><td>2/10</td><td>3</td><td>2</td><td>9</td><td>530</td><td>5</td><td>4.6M</td><td class="eval-active hidden-column">86.3</td><td class="hidden-column">3</td></tr><tr><td>Valerix</td><td>7</td><td class="eval-zero">0</td><td>850</td><td>1,050</td><td class="eval-zero">0</td><td>4/10</td><td class="eval-zero">0</td><td>1</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-low hidden-column">21.4</td><td class="hidden-column">0</td></tr><tr><td>Voodoo</td><td>7</td><td>2,182</td><td>94.1K</td><td>33.7K</td><td>14</td><td>8/10</td><td>5</td><td>4</td><td>9</td><td>975</td><td>5</td><td>23.3M</td><td class="eval-active hidden-column">166.7</td><td class="hidden-column">5</td></tr><tr><td>ZED</td><td>7</td><td>1,435</td><td>20.1K</td><td>20.7K</td><td>1</td><td>4/10</td><td>2</td><td>1</td><td>9</td><td>543</td><td>5</td><td>10.1M</td><td class="eval-active hidden-column">58.3</td><td class="hidden-column">2</td></tr>        </tbody>
+        <tfoot>
+          <tr><td>TOTAL</td><td>203</td><td>57.3K</td><td>1.1M</td><td>654.9K</td><td>218</td><td>151/200</td><td>65</td><td>51</td><td>197</td><td>12.9K</td><td>107</td><td>347.3M</td><td class="hidden-column">2,984.9</td><td class="hidden-column">67</td></tr><tr><td>AVERAGE</td><td>7</td><td>1,974.7</td><td>36.8K</td><td>22.6K</td><td>7.5</td><td>7.6/6.9</td><td>2.2</td><td>1.8</td><td>6.8</td><td>443.6</td><td>3.7</td><td>12M</td><td class="hidden-column">102.9</td><td class="hidden-column">2.3</td></tr>        </tfoot>
+      </table>
+    </div>
+
+          <div class="report-comment">
+        <ul>
+                      <li>
+              <span style="color: #ff5733;">*</span> Kajrilisar(279349176) joined on 2025-09-30 (Tuesday).             </li>
+                      <li>
+              <span style="color: #ff5733;">*</span> Joe Black left on 2025-10-05 (Sunday). On hiatus.            </li>
+                  </ul>
+      </div>
+      </div>
+
   <script>
-    const valueRegex = /(?:^\-?$)|^([+-]?\d+)(?:,(\d{3}))*(\.\d*)?(K|M|B|T)?(?:(\/)([+-]?\d+)(?:,(\d{3}))*(\.\d*)?(K|M|B|T)?)?$/;
+    
+    const config = {
+      viewerParamsName: 'viewer_params',
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const docParams = {
+      showEval: urlParams.get('showEval'),
+      searchKeyword: urlParams.get('search'),
+      sortColumn: urlParams.get('sortColumn'),
+      sortOrder: urlParams.get('sortOrder'),
+    }
+
+    function loadAndUpdateFormParams(itemName, updateParams = {}) {
+      const item = sessionStorage.getItem(itemName);
+      let params;
+      if (item) {
+        params = JSON.parse(item);
+      }
+      else {
+        params = {};
+      }
+
+      
+      let isUpdated = false;
+      for (const [key, value] of Object.entries(updateParams)) {
+        if (params[key] !== value) {
+          params[key] = value;
+          isUpdated = true;
+        }
+      }
+
+      if (isUpdated) {
+        saveFormParams(params, itemName);
+      }
+
+      return params;
+    }
+
+    function saveFormParams(params, itemName) {
+      sessionStorage.setItem(itemName, JSON.stringify(params));
+    }
+
+    function saveViewerParam(key, value) {
+      loadAndUpdateFormParams(config.viewerParamsName, {[key]: value});
+    }
+
+    function applyViewerParams(params) {
+      if (!params) return;
+      if (params.showEval != null) {
+        toggleEvaluation(params.showEval);
+      }
+      if (params.searchKeyword != null) {
+        applySearchFilter(params.searchKeyword);
+      }
+      if (params.sortColumn != null) {
+        sort(params.sortColumn, params.sortOrder);
+      }
+    }
+
+    const DATA_VALUE_REGEX = /(?:^\-?$)|^([+-]?\d+)(?:,(\d{3}))*(\.\d*)?(K|M|B|T)?(?:(\/)([+-]?\d+)(?:,(\d{3}))*(\.\d*)?(K|M|B|T)?)?$/;
 
     function parseNullable(value, unit) {
       if (value != null && value !== '') {
@@ -176,7 +323,7 @@
     }
 
     function parseValue(value) {
-      const matches = value.match(valueRegex);
+      const matches = value.match(DATA_VALUE_REGEX);
       const idx = matches.indexOf('/');
       const unit = [1, 1];
       if (matches) {
@@ -222,248 +369,241 @@
       return compval(va, vb, isAsc);
     }
 
-    document.addEventListener('keydown', function(event) {
-      if ((event.keyCode === 86 || event.key === 'v' || event.key === 'V')
-        && event.ctrlKey && event.shiftKey && event.altKey) {
-        event.preventDefault();
+    function toggleEvaluation(force = null, saveParam = false) {
+      const hiddenCols = document.querySelectorAll('.hidden-column');
+
+      let show;
+      if (force == null)
+        show = hiddenCols[0].style.display === 'none' || getComputedStyle(hiddenCols[0]).display === 'none';
+      else
+        show = force;
+
+      hiddenCols.forEach(col => {
+        col.style.display = show ? 'table-cell' : 'none';
+      });
+
+      if (saveParam)
+        saveViewerParam('showEval', show);
+    }
+
+    const searchCommandRegex = /^@(\w*)(<=|>=|<>|<|>|=)([^<>=].*)$/;
+
+    function applySearchFilter(searchKeyword, saveParam = false) {
+      const term = searchKeyword.toLowerCase();
+      let columnIndex = null;
+      let operator = null;
+      let logic = 'some';
+
+      const match = searchKeyword.match(searchCommandRegex);
+      if (match) {
+        const column = match[1].trim();
+        if (column) {
+          const header = findHeader(column);
+          if (header == null) return; 
+          columnIndex = parseInt(header.dataset.column);
+        }
+
+        const op = match[2];
+        let operand = match[3].trim();
+        if (!operand) return; 
+        if (operand === '-') {
+          operand = null;
+        } else if (columnIndex > 0) {
+          if (isNaN(operand))
+            return; 
+        }
+        switch (op) {
+          case '<=':
+            operator = operand != null ? (v => v !== null && v <= operand) : (v => false);
+            break;
+          case '>=':
+            operator = operand != null ? (v => v !== null && v >= operand) : (v => false);
+            break;
+          case '<':
+            operator = operand != null ? (v => v !== null && v < operand) : (v => false);
+            break;
+          case '>':
+            operator = operand != null ? (v => v !== null && v > operand) : (v => false);
+            break;
+          case '=':
+            operator = operand != null ? (v => v !== null && v == operand) : (v => v === null);
+            break;
+          case '<>':
+            operator = operand != null ? (v => v === null || v != operand) : (v => v !== null);
+            logic = 'every';
+            break;
+        }
+      } else {
+        if (searchKeyword) {
+          if (searchKeyword.startsWith('@')) return; 
+          columnIndex = 0;
+          operator = v => v.toLowerCase().includes(term);
+        }
+      }
+
+      const rows = [...document.querySelectorAll('#dataTable tbody tr')];
+      let someHidden = false;
+      rows.forEach(row => {
+        let match = false;
+        if (operator == null) {
+          match = true;
+        } else if (columnIndex == null) {
+
+          match = [...row.cells][logic]((cell, idx) => {
+            let value = cell.textContent;
+            if (idx > 0) {
+              value = parseValue(value);
+              value = Array.isArray(value) ? value[0] : value;
+            }
+            return operator(value);
+          });
+        } else {
+          let value = row.cells[columnIndex].textContent;
+          if (columnIndex > 0) {
+            value = parseValue(value);
+            value = Array.isArray(value) ? value[0] : value;
+          } else
+            value = value.toLowerCase();
+          match = operator(value);
+        }
+        row.classList.toggle('hidden', !match);
+        someHidden ||= !match;
+      });
+
+      const tfoot = document.querySelector('#dataTable tfoot');
+      if (tfoot)
+        tfoot.classList.toggle('hidden', someHidden);
+      const comment = document.querySelector('.report-comment');
+      if (comment)
+        comment.classList.toggle('hidden', someHidden);
+
+      if (saveParam) {
+        saveViewerParam('searchKeyword', searchKeyword);
+      }
+    }
+
+    let sortableHeaders = null;
+
+    function findHeader(columnSpec) {
+      
+      let header = null;
+      let searchTerm = null;
+      if (!isNaN(columnSpec)) {
+        searchTerm = columnSpec.toString();
+        header = sortableHeaders.find(th => 
+          th.dataset.column === searchTerm
+        );
+        if (header) return header;
+      } else {
+        searchTerm = columnSpec.trim().toLowerCase();
+      }
+
+      
+      return sortableHeaders.reduce((prev, th) => {
+        const headerName = th.textContent.trim().toLowerCase();
+        if (headerName.startsWith(searchTerm)) {
+          if (!prev || headerName.length < prev[1].length)
+            return [th, headerName];
+        }
+        return prev;
+      }, null)?.[0] || null;
+    }
+
+    function sort(header, order = null, saveParam = false) {
+      if (!sortableHeaders) return;
+      if (!(header instanceof HTMLElement)) {
+        header = findHeader(header);
+        if (!header) return;
+      }
+
+      if (order == null) {
+        order = (header.classList.contains('sorted') && header.classList.contains('asc')) ? 'desc' : 'asc';
+      }
+      const isAsc = order === 'asc';
+      const isNumeric = header.dataset.type !== 'text';
+      const columnIndex = parseInt(header.dataset.column);
+
+      const tbody = document.querySelector('#dataTable tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+
+      sortableHeaders.forEach(header => header.classList.remove('sorted', 'asc', 'desc'));
+      header.classList.add('sorted', order);
+
+      const fragment = document.createDocumentFragment();
+      rows.sort((a, b) => {
+        const aValue = a.cells[columnIndex].textContent;
+        const bValue = b.cells[columnIndex].textContent;
         
-        const hiddenCols = document.querySelectorAll('.hidden-column');
-        const isHidden = hiddenCols[0].style.display === 'none' || getComputedStyle(hiddenCols[0]).display === 'none';
-        hiddenCols.forEach(col => {
-          col.style.display = isHidden ? 'table-cell' : 'none';
-        });
+        let compareResult;
+        if (isNumeric) {
+          compareResult = compareNumericValues(aValue, bValue, isAsc);
+        } else {
+          compareResult = aValue.localeCompare(bValue);
+          if (!isAsc)
+            compareResult = -compareResult;
+        }
+
+        return compareResult;
+      });
+      rows.forEach(row => fragment.appendChild(row));
+      tbody.appendChild(fragment);
+
+      if (saveParam) {
+        const column = parseInt(header.dataset.column);
+        saveViewerParam('sortColumn', column);
+        saveViewerParam('sortOrder', order);
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      
+      if ((e.keyCode === 86 || e.key === 'v' || e.key === 'V')
+        && e.ctrlKey && e.shiftKey && e.altKey) {
+        e.preventDefault();
+
+        if (window.parent && window.parent !== window && typeof window.parent.toggleEvaluation === 'function') {
+          
+          const hiddenCols = document.querySelectorAll('.hidden-column');
+          const show = hiddenCols[0].style.display === 'none' || getComputedStyle(hiddenCols[0]).display === 'none';
+          window.parent.toggleEvaluation(show, true);
+        } else {
+          
+          toggleEvaluation(null, true);
+        }
       }
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      const table = document.getElementById('dataTable');
-      const sortableHeaders = document.querySelectorAll('div#dataTable > table > thead > tr > th[data-column]');
-      sortableHeaders.forEach(header => header.classList.add('sortable'));
-      const tbody = table.querySelector('tbody');
-      const rows = Array.from(tbody.querySelectorAll('tr'));
-      let sortDirection = {};
-
+      sortableHeaders = [...document.querySelectorAll('div#dataTable > table > thead > tr > th[data-column]')];
       sortableHeaders.forEach(header => {
+        header.classList.add('sortable');
         const sortButton = header.querySelector('span.sort-icon');
         sortButton.addEventListener('click', () => {
-          const column = parseInt(header.dataset.column);
-          
-          sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
-          const direction = sortDirection[column];
-          const isAsc = direction === 'asc';
-          const isNumeric = header.dataset.type !== 'text';
-          const nthchild = `td:nth-child(${column + 1})`;
-
-          sortableHeaders.forEach(header => header.classList.remove('sorted', 'asc', 'desc'));
-          header.classList.add('sorted', direction);
-
-          rows.sort((a, b) => {
-            const aValue = a.querySelector(nthchild).textContent;
-            const bValue = b.querySelector(nthchild).textContent;
+          const order = (header.classList.contains('sorted') && header.classList.contains('asc')) ? 'desc' : 'asc';
+          if (window.parent && window.parent !== window && typeof window.parent.sort === 'function') {
             
-            let compareResult;
-            if (isNumeric) {
-              compareResult = compareNumericValues(aValue, bValue, isAsc);
-            } else {
-              compareResult = aValue.localeCompare(bValue);
-              if (!isAsc)
-                compareResult = -compareResult;
-            }
-
-            return compareResult;
-          });
-          
-          rows.forEach(row => tbody.appendChild(row));
+            window.parent.sort(header, order, true);
+          } else {
+            
+            sort(header, order, true); 
+          }
         });
       });
+
+      const params = loadAndUpdateFormParams(config.viewerParamsName);
+      docParams.showEval ??= params.showEval ?? null;
+      docParams.searchKeyword ??= params.searchKeyword ?? null;
+      docParams.sortColumn ??= params.sortColumn ?? null;
+      docParams.sortOrder ??= params.sortOrder ?? null;
+
+      applyViewerParams(docParams);
+
+      if (typeof autoPublish !== 'undefined' && autoPublish) {
+        const button = document.getElementById("publish");
+        button.click();
+      }
     });
   </script>
-  
-  <div class="report-wrapper">
-    <div class="report-header">
-      <h1 class="report-title">Activity Report for XoX Server 469</h1>
-    </div>
-
-    <div class="report-info">
-      <table>
-        
-            <tbody><tr>
-              <td>Start Date (Inclusive)</td>
-              <td>2025-09-29</td>
-            </tr>
-          
-            <tr>
-              <td>End Date (Exclusive)</td>
-              <td>2025-10-06</td>
-            </tr>
-          
-            <tr>
-              <td>Duration</td>
-              <td>7 days</td>
-            </tr>
-          
-            <tr>
-              <td>File Name</td>
-              <td>activity_20250929_7days.html</td>
-            </tr>
-          
-            <tr>
-              <td>Final Guild Prestige Forecast</td>
-              <td>59</td>
-            </tr>
-                </tbody></table>
-    </div>
-
-    <div class="report-data" id="dataTable">
-      <table>
-        <thead>
-          
-              <tr>
-                <th rowspan="2" data-type="text" data-column="0" class="sortable">Name <span class="sort-icon"></span></th><th rowspan="2" data-type="numeric" data-column="1" class="sortable">Days <span class="sort-icon"></span></th><th colspan="4">Daily Activities</th><th>GW</th><th colspan="2">Clash of Worlds</th><th colspan="4">Raid</th><th colspan="2" class="hidden-column">Evaluation &amp; Rewards</th>
-              </tr>
-            
-              <tr>
-                <th data-type="numeric" data-column="2" class="sortable">Titanite <span class="sort-icon"></span></th><th data-type="numeric" data-column="3" class="sortable">Activity <span class="sort-icon"></span></th><th data-type="numeric" data-column="4" class="sortable">Guild Prestige <span class="sort-icon"></span></th><th data-type="numeric" data-column="5" class="sortable">Adventure <span class="sort-icon"></span></th><th data-type="numeric" data-column="6" class="sortable">Guild War <span class="sort-icon"></span></th><th data-type="numeric" data-column="7" class="sortable">Hero <span class="sort-icon"></span></th><th data-type="numeric" data-column="8" class="sortable">Titan <span class="sort-icon"></span></th><th data-type="numeric" data-column="9" class="sortable">Minions <span class="sort-icon"></span></th><th data-type="numeric" data-column="10" class="sortable">Morale <span class="sort-icon"></span></th><th data-type="numeric" data-column="11" class="sortable">Boss <span class="sort-icon"></span></th><th data-type="numeric" data-column="12" class="sortable">Damage <span class="sort-icon"></span></th><th data-type="numeric" data-column="13" class="hidden-column sortable">Evaluation Index <span class="sort-icon"></span></th><th data-type="numeric" data-column="14" class="hidden-column sortable">Present <span class="sort-icon"></span></th>
-              </tr>
-                    </thead>
-        <tbody>
-          
-              <tr>
-                <td>Abel</td><td>7</td><td>800</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-very-low hidden-column">9.1</td><td class="hidden-column">0</td>
-              </tr>
-            
-              <tr>
-                <td>Anophelus</td><td>7</td><td>4,703</td><td>63K</td><td>34.2K</td><td>13</td><td>8/10</td><td>3</td><td>3</td><td>9</td><td>650</td><td>5</td><td>37.2M</td><td class="eval-super-active hidden-column">187.8</td><td class="hidden-column">5</td>
-              </tr>
-            
-              <tr>
-                <td>APH</td><td>7</td><td>450</td><td>30.6K</td><td>16.4K</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>650</td><td>5</td><td>1.7M</td><td class="eval-active hidden-column">33.6</td><td class="hidden-column">2</td>
-              </tr>
-            
-              <tr>
-                <td>BOWMORE</td><td>7</td><td>2,104</td><td>20K</td><td>28.7K</td><td>12</td><td>-</td><td>1</td><td>3</td><td>9</td><td>382</td><td>3</td><td>1.6M</td><td class="eval-active hidden-column">101.7</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>Bryan000</td><td>7</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero hidden-column">0</td><td class="hidden-column">0</td>
-              </tr>
-            
-              <tr>
-                <td>BryanXXX</td><td>7</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero hidden-column">0</td><td class="hidden-column">0</td>
-              </tr>
-            
-              <tr>
-                <td>Esi Gorg</td><td>7</td><td>1,155</td><td>33.6K</td><td>29.3K</td><td>14</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>16.3M</td><td class="eval-active hidden-column">149</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>Flydman</td><td>7</td><td>2,391</td><td>11.2K</td><td>18.9K</td><td>3</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>8</td><td>226</td><td>4</td><td>908.3K</td><td class="eval-active hidden-column">53.2</td><td class="hidden-column">2</td>
-              </tr>
-            
-              <tr>
-                <td>Ihg</td><td>7</td><td>2,365</td><td>31.9K</td><td>32.4K</td><td>14</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>25.8M</td><td class="eval-active hidden-column">170.3</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>Ismapack</td><td>7</td><td>3,541</td><td>71.4K</td><td>26.5K</td><td>1</td><td>10/10</td><td>3</td><td>2</td><td>9</td><td>650</td><td>5</td><td>12.7M</td><td class="eval-active hidden-column">132.4</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>Kajrilisar</td><td>7</td><td>2,205</td><td>30.1K</td><td>26.1K</td><td>7</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-active hidden-column">77.2</td><td class="hidden-column">0</td>
-              </tr>
-            
-              <tr>
-                <td>killerado</td><td>7</td><td>7,365</td><td>67.2K</td><td>34.2K</td><td>14</td><td>10/10</td><td>5</td><td>3</td><td>9</td><td>650</td><td>5</td><td>90.7M</td><td class="eval-super-active hidden-column">246</td><td class="hidden-column">5</td>
-              </tr>
-            
-              <tr>
-                <td>Kolm</td><td>7</td><td>1,433</td><td>26.3K</td><td>28.5K</td><td>13</td><td>10/10</td><td>5</td><td>1</td><td>9</td><td>598</td><td>5</td><td>21M</td><td class="eval-active hidden-column">138.5</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>lin</td><td>7</td><td>3,449</td><td>69.6K</td><td>32.3K</td><td>15</td><td>10/10</td><td>5</td><td>4</td><td>9</td><td>650</td><td>5</td><td>37.5M</td><td class="eval-super-active hidden-column">201.4</td><td class="hidden-column">0</td>
-              </tr>
-            
-              <tr>
-                <td>lULU</td><td>7</td><td>1,965</td><td>36.2K</td><td>28.5K</td><td>14</td><td>10/10</td><td>3</td><td>2</td><td>9</td><td>629</td><td>5</td><td>5.2M</td><td class="eval-active hidden-column">141.7</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>Mar</td><td>7</td><td>5,088</td><td>67.7K</td><td>33.9K</td><td>13</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>14.6M</td><td class="eval-super-active hidden-column">188.9</td><td class="hidden-column">5</td>
-              </tr>
-            
-              <tr>
-                <td>mo-mo</td><td>7</td><td>2,175</td><td>48.4K</td><td>33.6K</td><td>15</td><td>10/10</td><td>4</td><td>4</td><td>9</td><td>650</td><td>5</td><td>15.9M</td><td class="eval-active hidden-column">165.4</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>Moto</td><td>7</td><td>825</td><td>9,868</td><td>18.7K</td><td>5</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>165</td><td>5</td><td>403.4K</td><td class="eval-active hidden-column">45.6</td><td class="hidden-column">2</td>
-              </tr>
-            
-              <tr>
-                <td>mssunicorn</td><td>7</td><td>300</td><td>32.3K</td><td>11.1K</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-low hidden-column">29.8</td><td class="hidden-column">0</td>
-              </tr>
-            
-              <tr>
-                <td>Numencito</td><td>7</td><td>1,110</td><td>55.4K</td><td>28.7K</td><td>14</td><td>10/10</td><td>2</td><td>4</td><td>9</td><td>650</td><td>5</td><td>9M</td><td class="eval-active hidden-column">145.9</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>Picasky</td><td>7</td><td>2,560</td><td>64.2K</td><td>22.2K</td><td>1</td><td>4/10</td><td class="eval-zero">0</td><td>1</td><td>9</td><td>650</td><td>5</td><td>12.3M</td><td class="eval-active hidden-column">84.3</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>Ralfda1derLIama</td><td>7</td><td>2,025</td><td>43.3K</td><td>27.5K</td><td>9</td><td>9/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>491</td><td>5</td><td>670K</td><td class="eval-active hidden-column">103.6</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>Reikachan</td><td>7</td><td>2,510</td><td>26.3K</td><td>29.8K</td><td>12</td><td>8/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>602</td><td>5</td><td>1.8M</td><td class="eval-active hidden-column">117.2</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>SodCheun</td><td>7</td><td>1,781</td><td>61.1K</td><td>27.9K</td><td>8</td><td>4/10</td><td>6</td><td>4</td><td>9</td><td>572</td><td>5</td><td>3.9M</td><td class="eval-active hidden-column">129.9</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>Team MR DUTERTE</td><td>7</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero hidden-column">0</td><td class="hidden-column">0</td>
-              </tr>
-            
-              <tr>
-                <td>Team Veggie</td><td>7</td><td>1,350</td><td>51.5K</td><td>30.1K</td><td>6</td><td>2/10</td><td>3</td><td>2</td><td>9</td><td>530</td><td>5</td><td>4.6M</td><td class="eval-active hidden-column">86.3</td><td class="hidden-column">3</td>
-              </tr>
-            
-              <tr>
-                <td>Valerix</td><td>7</td><td class="eval-zero">0</td><td>850</td><td>1,050</td><td class="eval-zero">0</td><td>4/10</td><td class="eval-zero">0</td><td>1</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-low hidden-column">21.4</td><td class="hidden-column">0</td>
-              </tr>
-            
-              <tr>
-                <td>Voodoo</td><td>7</td><td>2,182</td><td>94.1K</td><td>33.7K</td><td>14</td><td>8/10</td><td>5</td><td>4</td><td>9</td><td>975</td><td>5</td><td>23.3M</td><td class="eval-active hidden-column">166.7</td><td class="hidden-column">5</td>
-              </tr>
-            
-              <tr>
-                <td>ZED</td><td>7</td><td>1,435</td><td>20.1K</td><td>20.7K</td><td>1</td><td>4/10</td><td>2</td><td>1</td><td>9</td><td>543</td><td>5</td><td>10.1M</td><td class="eval-active hidden-column">58.3</td><td class="hidden-column">2</td>
-              </tr>
-                    </tbody>
-        <tfoot>
-          
-              <tr>
-                <td>TOTAL</td><td>203</td><td>57.3K</td><td>1.1M</td><td>654.9K</td><td>218</td><td>151/200</td><td>65</td><td>51</td><td>197</td><td>12.9K</td><td>107</td><td>347.3M</td><td class="hidden-column">2,984.9</td><td class="hidden-column">67</td>
-              </tr>
-            
-              <tr>
-                <td>AVERAGE</td><td>7</td><td>1,974.7</td><td>36.8K</td><td>22.6K</td><td>7.5</td><td>7.6/10</td><td>2.2</td><td>1.8</td><td>6.8</td><td>443.6</td><td>3.7</td><td>12M</td><td class="hidden-column">102.9</td><td class="hidden-column">2.3</td>
-              </tr>
-                    </tfoot>
-      </table>
-    </div>
-
-          <div class="report-comment">
-        <ul>
-          <li><span style="color: #ff5733;">*</span> Kajrilisar(279349176) joined on 2025-09-30 (Tuesday). </li>
-<li><span style="color: #ff5733;">*</span> Joe Black left on 2025-10-05 (Sunday). On hiatus.</li>        </ul>
-      </div>
-      </div>
-
 
 
 </body></html>

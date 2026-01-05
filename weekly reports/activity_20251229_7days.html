@@ -1,0 +1,632 @@
+<html><head>
+
+
+    <base target="_top">
+    <meta charset="UTF-8">
+    <style>
+      body {
+          font-family: sans-serif;
+          margin: 10px;
+          background-color: #f4f4f4;
+          color: #333;
+          padding-top: 20px;
+          padding-bottom: 20px;
+      }
+
+      .report-wrapper {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .report-header {
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+      }
+
+      .report-title { text-align: center; font-size: 24px; color: #2c3e50; }
+
+      .report-info {
+          display: flex;
+          justify-content: flex-start;
+          margin-bottom: 20px;
+      }
+
+      .report-info table {
+          width: auto;
+          border: 1px solid #f0d493;
+          border-collapse: collapse;
+          box-shadow: 0 0 0 1px #f0d493, 0 3px 10px rgba(192, 170, 129, 0.2);
+      }
+
+      .report-info td {
+          padding: 5px 10px;
+          text-align: left;
+          border: 1px solid #ddd;
+          background-color: #f2ead9;
+      }
+
+      table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 14px;
+      }
+
+      thead th, tfoot td {
+          background-color: #3783af;
+          color: white;
+          padding: 5px 10px;
+          border: 1px solid #2d6a8a;
+      }
+
+      tbody tr:nth-child(even) {
+          background-color: #f2f2f2;
+      }
+
+      td {
+          padding: 5px 10px;
+          border: 1px solid #ddd;
+          text-align: center;
+      }
+
+      td:first-child { text-align: left; }
+
+      .sort-icon {
+        display: inline-block;
+        margin-top: 6px;
+        margin-left: 8px;
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid #ccc;
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.2s;
+      }
+
+      th:hover .sort-icon {
+        opacity: 1;
+        cursor: pointer;
+      }
+
+      th.sorted .sort-icon {
+        opacity: 1;
+      }
+
+      th.asc .sort-icon {
+        border-bottom-color: #333;
+        transform: rotate(0deg);
+      }
+
+      th.desc .sort-icon {
+        border-bottom-color: #333;
+        transform: rotate(180deg);
+      }
+
+      .eval-zero { color: red; background-color: #ffd2d260; }
+      .eval-very-low { color: red; background-color: #ffd2d260; }
+      .eval-low { background-color: #ffd2d238; }
+      .eval-active {}
+      .eval-super-active { background-color: #cfeecfA0; color: #1a5e1a; font-weight: bold; }
+
+      #dataTable td:first-child {
+        white-space: nowrap;
+        font-weight: bold;
+        min-width: 120px;
+      }
+
+      #dataTable .aux-col {
+        display: table-cell;
+      }
+
+      #dataTable.hide-aux .aux-col {
+        display: none;
+      }
+
+      .report-comment {
+        width: 100%;
+        margin-top: 16px;
+        padding: 4px;
+        border-radius: 6px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        font-family: sans-serif;
+        font-size: 13px;
+      }
+
+      .report-comment ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .report-comment li {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+        line-height: 1.2;
+        color: #555;
+      }
+
+      .report-comment li:last-child {
+        border-bottom: none;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      button {
+        background-color: #485c83;
+        color: white;
+        padding: 8px 13px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #68AcA3;
+      }
+
+       
+      button:disabled {
+        cursor: default;
+        color: #f1f1f1;             
+        background-color: #a5adba;  
+        opacity: 0.7;               
+      }
+
+       
+      button:disabled:hover {
+        background-color: #a5adba;  
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+      }
+
+      @media (min-width: 768px) {
+
+        .report-comment {
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+
+        .report-data {
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+
+        .report-header {
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+
+        .report-title {
+          text-align: center;
+        }
+      }
+    </style>
+</head>
+<body>
+  
+
+  
+  <div class="report-wrapper">
+    <div class="report-header">
+      <h1 class="report-title">Weekly Guild Activity Report</h1>
+    </div>
+
+    <div class="report-info">
+      <table>
+                  <tbody><tr>
+            <td>Guild Name</td>
+            <td>XoX Server 469</td>
+          </tr>
+                  <tr>
+            <td>Start Date</td>
+            <td>2025-12-29</td>
+          </tr>
+                  <tr>
+            <td>End Date</td>
+            <td>2026-01-04</td>
+          </tr>
+                  <tr>
+            <td>Duration</td>
+            <td>7 days</td>
+          </tr>
+                  <tr>
+            <td>Guild Prestige Progress</td>
+            <td>1,148,210</td>
+          </tr>
+                  <tr>
+            <td>Estimated Final Guild Prestige</td>
+            <td>67</td>
+          </tr>
+                  <tr>
+            <td>File Name</td>
+            <td>activity_20251229_7days.html</td>
+          </tr>
+              </tbody></table>
+    </div>
+
+    <div id="dataTable" class="report-data hide-aux">
+      <table>
+        <thead>
+          <tr><th rowspan="2" data-type="text" data-column="0" class="sortable">Name <span class="sort-icon"></span></th><th rowspan="2" data-type="numeric" data-column="1" class="sortable">Days <span class="sort-icon"></span></th><th colspan="4">Daily Activities</th><th>GW</th><th colspan="2">Clash of Worlds</th><th colspan="4">Raid</th><th colspan="2" class="aux-col">Evaluation &amp; Rewards</th></tr><tr><th data-type="numeric" data-column="2" class="sortable">Titanite <span class="sort-icon"></span></th><th data-type="numeric" data-column="3" class="sortable">Activity <span class="sort-icon"></span></th><th data-type="numeric" data-column="4" class="sortable">Guild Prestige <span class="sort-icon"></span></th><th data-type="numeric" data-column="5" class="sortable">Adventure <span class="sort-icon"></span></th><th data-type="numeric" data-column="6" class="sortable">Guild War <span class="sort-icon"></span></th><th data-type="numeric" data-column="7" class="sortable">Hero <span class="sort-icon"></span></th><th data-type="numeric" data-column="8" class="sortable">Titan <span class="sort-icon"></span></th><th data-type="numeric" data-column="9" class="sortable">Minions <span class="sort-icon"></span></th><th data-type="numeric" data-column="10" class="sortable">Morale <span class="sort-icon"></span></th><th data-type="numeric" data-column="11" class="sortable">Boss <span class="sort-icon"></span></th><th data-type="numeric" data-column="12" class="sortable">Damage <span class="sort-icon"></span></th><th data-type="numeric" data-column="13" class="aux-col sortable">Evaluation Index <span class="sort-icon"></span></th><th data-type="numeric" data-column="14" class="aux-col sortable">Present <span class="sort-icon"></span></th></tr>        </thead>
+        <tbody>
+          <tr><td>Al Kijan</td><td>7</td><td>710</td><td>8,898</td><td>25.4K</td><td>11</td><td>-</td><td class="eval-zero">0</td><td>2</td><td>9</td><td>550</td><td>5</td><td>2.7M</td><td class="eval-active aux-col">66.9</td><td class="aux-col">2</td></tr><tr><td>Anophelus</td><td>7</td><td>8,188</td><td>68.1K</td><td>35K</td><td>13</td><td>6/10</td><td>3</td><td>4</td><td>9</td><td>550</td><td>5</td><td>39.5M</td><td class="eval-super-active aux-col">209.1</td><td class="aux-col">5</td></tr><tr><td>BOWMORE</td><td>7</td><td>2,025</td><td>30.3K</td><td>30.2K</td><td>12</td><td>9/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>9</td><td>550</td><td>2</td><td>10M</td><td class="eval-active aux-col">115.7</td><td class="aux-col">3</td></tr><tr><td>Esi Gorg</td><td>7</td><td>1,156</td><td>25.1K</td><td>30.1K</td><td>12</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>18.3M</td><td class="eval-active aux-col">139</td><td class="aux-col">3</td></tr><tr><td>Flydman</td><td>7</td><td>2,177</td><td>15.6K</td><td>18K</td><td>5</td><td>-</td><td>1</td><td class="eval-zero">0</td><td>9</td><td>550</td><td>1</td><td>3M</td><td class="eval-active aux-col">60.1</td><td class="aux-col">2</td></tr><tr><td>Gangsteris</td><td>7</td><td>705</td><td>16.2K</td><td>26.1K</td><td>16</td><td>-</td><td>1</td><td>1</td><td>9</td><td>414</td><td>5</td><td>898.6K</td><td class="eval-active aux-col">79.6</td><td class="aux-col">2</td></tr><tr><td>Ihg</td><td>7</td><td>3,018</td><td>41.9K</td><td>32.3K</td><td>15</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>17.1M</td><td class="eval-active aux-col">163.9</td><td class="aux-col">4</td></tr><tr><td>Ismapack</td><td>7</td><td>3,296</td><td>52K</td><td>31K</td><td>1</td><td>8/10</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>18.9M</td><td class="eval-active aux-col">143</td><td class="aux-col">3</td></tr><tr><td>Joe Black</td><td>7</td><td>1,367</td><td>17.5K</td><td>27.2K</td><td>12</td><td>6/10</td><td>6</td><td>4</td><td>9</td><td>448</td><td>5</td><td>4.8M</td><td class="eval-active aux-col">103.9</td><td class="aux-col">3</td></tr><tr><td>Kajrilisar</td><td>7</td><td>3,525</td><td>31.4K</td><td>26.9K</td><td>9</td><td>10/10</td><td>2</td><td>3</td><td>9</td><td>550</td><td>5</td><td>3.9M</td><td class="eval-active aux-col">128.7</td><td class="aux-col">3</td></tr><tr><td>Kanibalas</td><td>7</td><td>705</td><td>16.1K</td><td>26.3K</td><td>13</td><td>-</td><td class="eval-zero">0</td><td>1</td><td>9</td><td>370</td><td>5</td><td>541.4K</td><td class="eval-active aux-col">68.7</td><td class="aux-col">2</td></tr><tr><td>Kebabas</td><td>7</td><td>805</td><td>22.3K</td><td>26.6K</td><td>19</td><td>-</td><td>1</td><td class="eval-zero">0</td><td>9</td><td>390</td><td>5</td><td>463.8K</td><td class="eval-active aux-col">82</td><td class="aux-col">2</td></tr><tr><td>Kolm</td><td>7</td><td>1,739</td><td>50.7K</td><td>27.4K</td><td>10</td><td>4/10</td><td>1</td><td class="eval-zero">0</td><td>9</td><td>550</td><td>5</td><td>16.1M</td><td class="eval-active aux-col">108.3</td><td class="aux-col">3</td></tr><tr><td>lULU</td><td>7</td><td>2,475</td><td>46.3K</td><td>26.2K</td><td>15</td><td>10/10</td><td>4</td><td>4</td><td>9</td><td>550</td><td>5</td><td>12.9M</td><td class="eval-active aux-col">150.8</td><td class="aux-col">4</td></tr><tr><td>Mai.469</td><td>7</td><td>450</td><td>58.3K</td><td>12.7K</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-active aux-col">60.8</td><td class="aux-col">2</td></tr><tr><td>Mar</td><td>7</td><td>4,575</td><td>45.7K</td><td>33.8K</td><td>16</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>13.1M</td><td class="eval-active aux-col">176.7</td><td class="aux-col">4</td></tr><tr><td>mo-mo</td><td>7</td><td>1,575</td><td>43.9K</td><td>33.2K</td><td>19</td><td>10/10</td><td>5</td><td>4</td><td>9</td><td>550</td><td>5</td><td>16.3M</td><td class="eval-active aux-col">151.8</td><td class="aux-col">4</td></tr><tr><td>Moto</td><td>7</td><td>525</td><td>21.7K</td><td>21.6K</td><td>6</td><td>-</td><td>6</td><td>4</td><td>9</td><td>448</td><td>5</td><td>773K</td><td class="eval-active aux-col">68.8</td><td class="aux-col">2</td></tr><tr><td>Numencito</td><td>7</td><td>615</td><td>20.7K</td><td>17.4K</td><td class="eval-zero">0</td><td>10/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>3</td><td>6.2M</td><td class="eval-active aux-col">65.2</td><td class="aux-col">2</td></tr><tr><td>Ralfda1derLlama</td><td>7</td><td>2,325</td><td>44.9K</td><td>27.8K</td><td>14</td><td>10/10</td><td>3</td><td>4</td><td>9</td><td>825</td><td>5</td><td>16M</td><td class="eval-active aux-col">149.8</td><td class="aux-col">3</td></tr><tr><td>Random</td><td>7</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero aux-col">0</td><td class="aux-col">0</td></tr><tr><td>Reikachan</td><td>7</td><td>2,295</td><td>18.3K</td><td>30.7K</td><td>13</td><td>8/10</td><td class="eval-zero">0</td><td>1</td><td>9</td><td>550</td><td>5</td><td>3.5M</td><td class="eval-active aux-col">102.9</td><td class="aux-col">3</td></tr><tr><td>Sam 81</td><td>7</td><td>1,648</td><td>156K</td><td>33.1K</td><td>12</td><td>10/10</td><td>1</td><td>4</td><td>9</td><td>550</td><td>5</td><td>20.4M</td><td class="eval-active aux-col">156.6</td><td class="aux-col">4</td></tr><tr><td>SodCheun</td><td>7</td><td>1,985</td><td>34.9K</td><td>26.4K</td><td>7</td><td>4/10</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>10.5M</td><td class="eval-active aux-col">101.8</td><td class="aux-col">3</td></tr><tr><td>Team 2PFF</td><td>7</td><td>480</td><td>12.1K</td><td>18.3K</td><td>5</td><td>10/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>5</td><td>2.3M</td><td class="eval-active aux-col">74.9</td><td class="aux-col">2</td></tr><tr><td>Team Veggie</td><td>7</td><td>1,223</td><td>41.7K</td><td>30.6K</td><td>9</td><td>-</td><td>6</td><td>4</td><td>9</td><td>550</td><td>5</td><td>4M</td><td class="eval-active aux-col">105.7</td><td class="aux-col">3</td></tr><tr><td>Valerix</td><td>7</td><td>2,140</td><td>85.5K</td><td>25K</td><td>12</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>5</td><td>3.5M</td><td class="eval-active aux-col">104.5</td><td class="aux-col">3</td></tr><tr><td>Vistro</td><td>7</td><td>1,330</td><td>18.9K</td><td>25.9K</td><td>13</td><td>10/10</td><td>1</td><td>2</td><td>9</td><td>550</td><td>5</td><td>2M</td><td class="eval-active aux-col">107.2</td><td class="aux-col">3</td></tr><tr><td>ZED</td><td>7</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero aux-col">0</td><td class="aux-col">0</td></tr>        </tbody>
+        <tfoot>
+          <tr><td>TOTAL</td><td>203</td><td>53.1K</td><td>1M</td><td>725.1K</td><td>289</td><td>155/200</td><td>71</td><td>62</td><td>207</td><td>12.2K</td><td>121</td><td>247.5M</td><td class="aux-col">3,046.4</td><td class="aux-col">79</td></tr><tr><td>AVERAGE</td><td>7</td><td>1,829.6</td><td>36K</td><td>25K</td><td>10</td><td>7.8/6.9</td><td>2.4</td><td>2.1</td><td>7.1</td><td>422.2</td><td>4.2</td><td>8.5M</td><td class="aux-col">105</td><td class="aux-col">2.7</td></tr>        </tfoot>
+      </table>
+    </div>
+
+          <div class="report-comment">
+        <ul>
+                      <li>
+              <span style="color: #ff5733;">*</span> The difficulty for next week?s raid, Cradle of the Stars, has increased to 150 due to a missed reset.            </li>
+                      <li>
+              <span style="color: #ff5733;">*</span> APH was banned on 2026-01-04 (Sunday). Expelled due to long-term inactivity. The member was expelled and subsequently blocked due to hostile public behavior directed at the guild?s management, followed by a prolonged period of inactivity. As a result, additional blocking measures were enforced.            </li>
+                  </ul>
+      </div>
+      </div>
+
+  <script>
+    
+    const config = {
+      viewerParamsName: 'viewer_params',
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const docParams = {
+      showEval: urlParams.get('showEval'),
+      searchKeyword: urlParams.get('search'),
+      sortColumn: urlParams.get('sortColumn'),
+      sortOrder: urlParams.get('sortOrder'),
+    }
+
+    const dataTable = document.getElementById('dataTable');
+    let showEval = !dataTable.classList.contains('hide-aux');
+
+    function loadAndUpdateFormParams(itemName, updateParams = {}) {
+      const item = sessionStorage.getItem(itemName);
+      let params;
+      if (item) {
+        params = JSON.parse(item);
+      }
+      else {
+        params = {};
+      }
+
+      
+      let isUpdated = false;
+      for (const [key, value] of Object.entries(updateParams)) {
+        if (params[key] !== value) {
+          params[key] = value;
+          isUpdated = true;
+        }
+      }
+
+      if (isUpdated) {
+        saveFormParams(params, itemName);
+      }
+
+      return params;
+    }
+
+    function saveFormParams(params, itemName) {
+      sessionStorage.setItem(itemName, JSON.stringify(params));
+    }
+
+    function saveViewerParam(key, value) {
+      loadAndUpdateFormParams(config.viewerParamsName, {[key]: value});
+    }
+
+    function applyViewerParams(params) {
+      if (!params) return;
+      if (params.showEval != null) {
+        toggleEvaluation(params.showEval);
+      }
+      if (params.searchKeyword != null) {
+        applySearchFilter(params.searchKeyword);
+      }
+      if (params.sortColumn != null) {
+        sort(params.sortColumn, params.sortOrder);
+      }
+    }
+
+    const DATA_VALUE_REGEX = /(?:^\-?$)|^([+-]?\d+)(?:,(\d{3}))*(\.\d*)?(K|M|B|T)?(?:(\/)([+-]?\d+)(?:,(\d{3}))*(\.\d*)?(K|M|B|T)?)?$/;
+
+    function parseNullable(value, unit) {
+      if (value != null && value !== '') {
+        const a= parseFloat(value) * unit;
+        return a;
+      }
+      return null;
+    }
+
+    function parseValue(value) {
+      const matches = value.match(DATA_VALUE_REGEX);
+      const idx = matches.indexOf('/');
+      const unit = [1, 1];
+      if (matches) {
+        matches.forEach((str, i) => {
+          const uidx = (idx === -1 || i < idx) ? 0 : 1;
+          if (str === 'K')
+            [unit[uidx], matches[i]] = [1000, ''];
+          else if (str === 'M')
+            [unit[uidx], matches[i]] = [1000000, ''];
+          else if (str === 'B')
+            [unit[uidx], matches[i]] = [1000000000, ''];
+          else if (str === 'T')
+            [unit[uidx], matches[i]] = [1000000000000, ''];
+        })
+        if (idx === -1)
+          return parseNullable(matches.slice(1).join(''), unit[0]);
+        return [parseNullable(matches.slice(1, idx).join(''), unit[0]), parseNullable(matches.slice(idx + 1).join(''), unit[1])];
+      }
+    }
+
+    function compval(a, b, isAsc) {
+      if (a === b)
+        return 0;
+      if (a === null)
+        return 1;
+      else if (b === null)
+        return -1;
+      return isAsc ? (a - b) : (b - a);
+    }
+
+    function compareNumericValues(a, b, isAsc) {
+      let va = parseValue(a);
+      let vb = parseValue(b);
+      if (Array.isArray(va) && Array.isArray(vb)) {
+        let fc = compval(va[0], vb[0], isAsc);
+        if (!fc)
+          fc = compval(va[1], vb[1], isAsc);
+        return fc;
+      } else {
+        va = Array.isArray(va) ? va[0] : va;
+        vb = Array.isArray(vb) ? vb[0] : vb;
+      }
+      return compval(va, vb, isAsc);
+    }
+
+    function toggleEvaluation(force = null, saveParam = false) {
+      let show;
+      if (force == null)
+        show = !showEval;
+      else
+        show = force;
+
+      if (show)
+        dataTable.classList.remove('hide-aux');
+      else
+        dataTable.classList.add('hide-aux');
+
+      showEval = show;
+      if (saveParam)
+        saveViewerParam('showEval', show);
+    }
+
+    const searchCommandRegex = /^@(\w*)(<=|>=|<>|<|>|=)([^<>=].*)$/;
+
+    function applySearchFilter(searchKeyword, saveParam = false) {
+      const term = searchKeyword.toLowerCase();
+      let columnIndex = null;
+      let operator = null;
+      let logic = 'some';
+
+      const match = searchKeyword.match(searchCommandRegex);
+      if (match) {
+        const column = match[1].trim();
+        if (column) {
+          const header = findHeader(column);
+          if (header == null) return; 
+          columnIndex = parseInt(header.dataset.column);
+        }
+
+        const op = match[2];
+        let operand = match[3].trim();
+        if (!operand) return; 
+        if (operand === '-') {
+          operand = null;
+        } else if (columnIndex > 0) {
+          if (isNaN(operand))
+            return; 
+        }
+        switch (op) {
+          case '<=':
+            operator = operand != null ? (v => v !== null && v <= operand) : (v => false);
+            break;
+          case '>=':
+            operator = operand != null ? (v => v !== null && v >= operand) : (v => false);
+            break;
+          case '<':
+            operator = operand != null ? (v => v !== null && v < operand) : (v => false);
+            break;
+          case '>':
+            operator = operand != null ? (v => v !== null && v > operand) : (v => false);
+            break;
+          case '=':
+            operator = operand != null ? (v => v !== null && v == operand) : (v => v === null);
+            break;
+          case '<>':
+            operator = operand != null ? (v => v === null || v != operand) : (v => v !== null);
+            logic = 'every';
+            break;
+        }
+      } else {
+        if (searchKeyword) {
+          if (searchKeyword.startsWith('@')) return; 
+          columnIndex = 0;
+          operator = v => v.toLowerCase().includes(term);
+        }
+      }
+
+      const rows = [...dataTable.querySelectorAll('tbody tr')];
+      let someHidden = false;
+      rows.forEach(row => {
+        let match = false;
+        if (operator == null) {
+          match = true;
+        } else if (columnIndex == null) {
+
+          match = [...row.cells][logic]((cell, idx) => {
+            let value = cell.textContent;
+            if (idx > 0) {
+              value = parseValue(value);
+              value = Array.isArray(value) ? value[0] : value;
+            }
+            return operator(value);
+          });
+        } else {
+          let value = row.cells[columnIndex].textContent;
+          if (columnIndex > 0) {
+            value = parseValue(value);
+            value = Array.isArray(value) ? value[0] : value;
+          } else
+            value = value.toLowerCase();
+          match = operator(value);
+        }
+        row.classList.toggle('hidden', !match);
+        someHidden ||= !match;
+      });
+
+      const tfoot = dataTable.querySelector('tfoot');
+      if (tfoot)
+        tfoot.classList.toggle('hidden', someHidden);
+      const comment = document.querySelector('.report-comment');
+      if (comment)
+        comment.classList.toggle('hidden', someHidden);
+
+      if (saveParam) {
+        saveViewerParam('searchKeyword', searchKeyword);
+      }
+    }
+
+    let sortableHeaders = null;
+
+    function findHeader(columnSpec) {
+      
+      let header = null;
+      let searchTerm = null;
+      if (!isNaN(columnSpec)) {
+        searchTerm = columnSpec.toString();
+        header = sortableHeaders.find(th => 
+          th.dataset.column === searchTerm
+        );
+        if (header) return header;
+      } else {
+        searchTerm = columnSpec.trim().toLowerCase();
+      }
+
+      
+      return sortableHeaders.reduce((prev, th) => {
+        const headerName = th.textContent.trim().toLowerCase();
+        if (headerName.startsWith(searchTerm)) {
+          if (!prev || headerName.length < prev[1].length)
+            return [th, headerName];
+        }
+        return prev;
+      }, null)?.[0] || null;
+    }
+
+    function sort(header, order = null, saveParam = false) {
+      if (!sortableHeaders) return;
+      if (!(header instanceof HTMLElement)) {
+        header = findHeader(header);
+        if (!header) return;
+      }
+
+      if (order == null) {
+        order = (header.classList.contains('sorted') && header.classList.contains('asc')) ? 'desc' : 'asc';
+      }
+      const isAsc = order === 'asc';
+      const isNumeric = header.dataset.type !== 'text';
+      const columnIndex = parseInt(header.dataset.column);
+
+      const tbody = dataTable.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+
+      sortableHeaders.forEach(header => header.classList.remove('sorted', 'asc', 'desc'));
+      header.classList.add('sorted', order);
+
+      const fragment = document.createDocumentFragment();
+      rows.sort((a, b) => {
+        const aValue = a.cells[columnIndex].textContent;
+        const bValue = b.cells[columnIndex].textContent;
+        
+        let compareResult;
+        if (isNumeric) {
+          compareResult = compareNumericValues(aValue, bValue, isAsc);
+        } else {
+          compareResult = aValue.localeCompare(bValue);
+          if (!isAsc)
+            compareResult = -compareResult;
+        }
+
+        return compareResult;
+      });
+      rows.forEach(row => fragment.appendChild(row));
+      tbody.appendChild(fragment);
+
+      if (saveParam) {
+        const column = parseInt(header.dataset.column);
+        saveViewerParam('sortColumn', column);
+        saveViewerParam('sortOrder', order);
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      
+      if ((e.keyCode === 86 || e.key === 'v' || e.key === 'V')
+        && e.ctrlKey && e.shiftKey && e.altKey) {
+        e.preventDefault();
+
+        if (window.parent && window.parent !== window && typeof window.parent.toggleEvaluation === 'function') {
+          
+          window.parent.toggleEvaluation(!showEval, true);
+        } else {
+          
+          toggleEvaluation(null, true);
+        }
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      sortableHeaders = [...dataTable.querySelectorAll('table > thead > tr > th[data-column]')];
+      sortableHeaders.forEach(header => {
+        header.classList.add('sortable');
+        const sortButton = header.querySelector('span.sort-icon');
+        sortButton.addEventListener('click', () => {
+          const order = (header.classList.contains('sorted') && header.classList.contains('asc')) ? 'desc' : 'asc';
+          if (window.parent && window.parent !== window && typeof window.parent.sort === 'function') {
+            
+            window.parent.sort(header, order, true);
+          } else {
+            
+            sort(header, order, true); 
+          }
+        });
+      });
+
+      const params = loadAndUpdateFormParams(config.viewerParamsName);
+      docParams.showEval ??= params.showEval ?? null;
+      docParams.searchKeyword ??= params.searchKeyword ?? null;
+      docParams.sortColumn ??= params.sortColumn ?? null;
+      docParams.sortOrder ??= params.sortOrder ?? null;
+
+      applyViewerParams(docParams);
+
+      if (typeof autoPublish !== 'undefined' && autoPublish) {
+        const button = document.getElementById("publish");
+        button.click();
+      }
+    });
+  </script>
+
+
+</body></html>

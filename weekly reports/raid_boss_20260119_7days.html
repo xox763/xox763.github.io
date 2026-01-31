@@ -4,6 +4,7 @@
     <base target="_top">
     <meta charset="UTF-8">
     <style>
+
       body {
           font-family: sans-serif;
           margin: 10px;
@@ -15,8 +16,22 @@
 
       .report-wrapper {
         width: 100%;
-        max-width: 1600px;
         margin: 0 auto;
+        overflow-x: auto;
+      }
+
+      @media (min-width: 768px) {
+        .report-wrapper {
+          max-width: 1500px;
+        }
+
+        .report-title {
+          text-align: center;
+        }
+      }
+
+      .report-header, .report-data, .report-comment {
+        width: 100%;
       }
 
       .report-header {
@@ -68,7 +83,7 @@
       }
 
       td {
-          padding: 5px 15px;
+          padding: 5px 10px;
           border: 1px solid #ddd;
           text-align: right;
       }
@@ -107,47 +122,23 @@
         transform: rotate(180deg);
       }
 
-      .slide-details {
-        overflow: hidden;
-        margin-bottom: 20px;
-        display: block;  
-      }
-
-      summary {
-        padding: 0 15px;
-        cursor: pointer;
-        user-select: none; 
-        -webkit-user-select: none;  
-      }
-
-      .content {
-        overflow: hidden;
-        min-height: 0; 
-        padding: 0 15px;
-      }
-
-       
-      .slide-details[open] .content {
-        padding: 15px;
-      }
-
       .eval-zero { color: red; background-color: #ffd2d260; }
       .eval-very-low { color: red; background-color: #ffd2d260; }
       .eval-low { background-color: #ffd2d238; }
       .eval-active {}
       .eval-super-active { background-color: #cfeecfA0; color: #1a5e1a; font-weight: bold; }
 
-      #dataTable td:first-child {
+      .report-data td:first-child {
         white-space: nowrap;
         font-weight: bold;
         min-width: 120px;
       }
 
-      #dataTable .aux-col {
+      .report-data .aux-col {
         display: table-cell;
       }
 
-      #dataTable.hide-aux .aux-col {
+      .report-data.hide-aux .aux-col {
         display: none;
       }
 
@@ -183,6 +174,30 @@
         display: none;
       }
 
+      .slide-details {
+        overflow: hidden;
+        margin-bottom: 20px;
+        display: block;  
+      }
+
+      summary {
+        padding: 0 15px;
+        cursor: pointer;
+        user-select: none; 
+        -webkit-user-select: none;  
+      }
+
+      .content {
+        overflow: hidden;
+        min-height: 0; 
+        padding: 0 15px;
+      }
+
+       
+      .slide-details[open] .content {
+        padding: 15px;
+      }
+
       button {
         background-color: #485c83;
         color: white;
@@ -215,27 +230,6 @@
         gap: 16px;
       }
 
-      @media (min-width: 768px) {
-
-        .report-comment {
-          max-width: 1100px;
-          margin: 0 auto;
-        }
-
-        .report-data {
-          max-width: 1100px;
-          margin: 0 auto;
-        }
-
-        .report-header {
-          max-width: 1100px;
-          margin: 0 auto;
-        }
-
-        .report-title {
-          text-align: center;
-        }
-      }
     </style>
 </head>
 <body>

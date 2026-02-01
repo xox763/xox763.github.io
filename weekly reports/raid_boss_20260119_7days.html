@@ -15,31 +15,9 @@
       }
 
       table {
-        display: table;
-        width: auto;
-        table-layout: auto;
         border-collapse: collapse;
         font-size: 14px;
       }
-
-      thead th, tfoot td {
-        background-color: #3783af;
-        color: white;
-        padding: 5px 10px;
-        border: 1px solid #2d6a8a;
-      }
-
-      tbody tr:nth-child(even) {
-        background-color: #f2f2f2;
-      }
-
-      td {
-        padding: 5px 10px;
-        border: 1px solid #ddd;
-        text-align: right;
-      }
-
-      td:first-child { text-align: left; }
 
       .report-wrapper {
         width: 100%;
@@ -51,24 +29,46 @@
 
          
       .report-header {
-        width: 100%;
-        padding-bottom: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
       }
 
-      .report-title { text-align: center; font-size: 24px; color: #2c3e50; }
+      .report-title { font-size: 24px; color: #2c3e50; }
 
       .report-info {
-        display: flex;
         align-self: flex-start; 
         margin-left: 0;
         margin-right: auto;
+        margin-bottom: 20px;
+      }
+
+      .slide-details {
+        display: block;  
+        width: max-content;
+        align-self: flex-start;
+        margin-left: 0;
+        overflow: hidden;
+      }
+
+      summary {
+        padding: 0 15px;
+        cursor: pointer;
+        user-select: none; 
+        -webkit-user-select: none;  
+      }
+
+      .content {
+        overflow: hidden;
+        min-height: 0; 
+        padding: 0 15px;
+      }
+
+       
+      .slide-details[open] .content {
+        padding: 15px;
       }
 
       .report-info table {
-        width: auto;
         border: 1px solid #f0d493;
-        border-collapse: collapse;
         box-shadow: 0 0 0 1px #f0d493, 0 3px 10px rgba(192, 170, 129, 0.2);
       }
 
@@ -122,24 +122,41 @@
       .eval-active {}
       .eval-super-active { background-color: #cfeecfA0; color: #1a5e1a; font-weight: bold; }
 
-      .report-data th {
+      #reportData table {
+        width: max-content;
+        background-color: #f2ead9;
+      }
+
+      #reportData thead th, #reportData tfoot td {
         width: 0;
+        background-color: #3783af;
+        color: white;
+        padding: 5px 10px;
+        border: 1px solid #2d6a8a;
       }
 
-      .report-data td {
+      #reportData tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      #reportData td {
         white-space: nowrap;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        text-align: right;
       }
 
-      .report-data td:first-child {
+      #reportData td:first-child {
+        text-align: left;
         font-weight: bold;
         min-width: 120px;
       }
 
-      .report-data .aux-col {
+      #reportData .aux-col {
         display: table-cell;
       }
 
-      .report-data.hide-aux .aux-col {
+      #reportData.hide-aux .aux-col {
         display: none;
       }
 
@@ -173,30 +190,6 @@
 
       .hidden {
         display: none;
-      }
-
-      .slide-details {
-        overflow: hidden;
-        margin-bottom: 20px;
-        display: block;  
-      }
-
-      summary {
-        padding: 0 15px;
-        cursor: pointer;
-        user-select: none; 
-        -webkit-user-select: none;  
-      }
-
-      .content {
-        overflow: hidden;
-        min-height: 0; 
-        padding: 0 15px;
-      }
-
-       
-      .slide-details[open] .content {
-        padding: 15px;
       }
 
       button {
@@ -235,58 +228,64 @@
 </head>
 <body>
   
+  
+  
 
   
+    
+
   <div class="report-wrapper">
     <div class="report-header">
       <h1 class="report-title">Weekly Raid Activity Report</h1>
     </div>
 
-    <details id="dataOverview" class="slide-details" open="">
-      <summary>Overview</summary>
-      <div class="report-info content">
-        <table>
-                      <tbody><tr>
-              <td>Start Date</td>
-              <td>2026-01-19</td>
-            </tr>
-                      <tr>
-              <td>End Date</td>
-              <td>2026-01-25</td>
-            </tr>
-                      <tr>
-              <td>Duration</td>
-              <td>7 days</td>
-            </tr>
-                      <tr>
-              <td>File Name</td>
-              <td>raid_boss_20260119_7days.html</td>
-            </tr>
-                      <tr>
-              <td>Raid - Type</td>
-              <td>Cradle of the Stars</td>
-            </tr>
-                      <tr>
-              <td>Raid - Max Level Killed</td>
-              <td>150</td>
-            </tr>
-                      <tr>
-              <td>Raid - Guild Morale</td>
-              <td>17,421</td>
-            </tr>
-                      <tr>
-              <td>Raid - Total Boss Damage</td>
-              <td>430,288,599</td>
-            </tr>
-                      <tr>
-              <td>Raid - Total Boss Attacks</td>
-              <td>116</td>
-            </tr>
-                  </tbody></table>
-      </div>
-    </details>
+    <div class="report-info">
+      <details id="dataOverview" class="slide-details" open="">
+        <summary>Overview</summary>
+        <div class="content">
+          <table>
+                          <tbody><tr>
+                <td>Start Date</td>
+                <td>2026-01-19</td>
+              </tr>
+                          <tr>
+                <td>End Date</td>
+                <td>2026-01-25</td>
+              </tr>
+                          <tr>
+                <td>Duration</td>
+                <td>7 days</td>
+              </tr>
+                          <tr>
+                <td>File Name</td>
+                <td>raid_boss_20260119_7days.html</td>
+              </tr>
+                          <tr>
+                <td>Raid - Type</td>
+                <td>Cradle of the Stars</td>
+              </tr>
+                          <tr>
+                <td>Raid - Max Level Killed</td>
+                <td>150</td>
+              </tr>
+                          <tr>
+                <td>Raid - Guild Morale</td>
+                <td>17,421</td>
+              </tr>
+                          <tr>
+                <td>Raid - Total Boss Damage</td>
+                <td>430,288,599</td>
+              </tr>
+                          <tr>
+                <td>Raid - Total Boss Attacks</td>
+                <td>116</td>
+              </tr>
+                      </tbody></table>
+        </div>
+      </details>
+    </div>
 
-    <div id="dataTable" class="report-data hide-aux">
+    <div id="reportData" class="report-data hide-aux">
       <table>
         <thead>
           <tr><th rowspan="2" data-type="text" data-column="0" class="sortable">Name <span class="sort-icon"></span></th><th colspan="3">Slot 1</th><th colspan="3">Slot 2</th><th colspan="3">Slot 3</th><th colspan="3">Slot 4</th><th colspan="3">Slot 5</th><th colspan="3">Slot 6</th><th colspan="3"></th><th class="aux-col"></th></tr><tr><th data-type="text" data-column="1" class="sortable">Hero <span class="sort-icon"></span></th><th data-type="numeric" data-column="2" class="sortable">Power <span class="sort-icon"></span></th><th data-type="numeric" data-column="3" class="sortable">Patron <span class="sort-icon"></span></th><th data-type="text" data-column="4" class="sortable">Hero <span class="sort-icon"></span></th><th data-type="numeric" data-column="5" class="sortable">Power <span class="sort-icon"></span></th><th data-type="numeric" data-column="6" class="sortable">Patron <span class="sort-icon"></span></th><th data-type="text" data-column="7" class="sortable">Hero <span class="sort-icon"></span></th><th data-type="numeric" data-column="8" class="sortable">Power <span class="sort-icon"></span></th><th data-type="numeric" data-column="9" class="sortable">Patron <span class="sort-icon"></span></th><th data-type="text" data-column="10" class="sortable">Hero <span class="sort-icon"></span></th><th data-type="numeric" data-column="11" class="sortable">Power <span class="sort-icon"></span></th><th data-type="numeric" data-column="12" class="sortable">Patron <span class="sort-icon"></span></th><th data-type="text" data-column="13" class="sortable">Hero <span class="sort-icon"></span></th><th data-type="numeric" data-column="14" class="sortable">Power <span class="sort-icon"></span></th><th data-type="numeric" data-column="15" class="sortable">Patron <span class="sort-icon"></span></th><th data-type="text" data-column="16" class="sortable">Pet <span class="sort-icon"></span></th><th data-type="numeric" data-column="17" class="sortable">Power <span class="sort-icon"></span></th><th data-type="numeric" data-column="18" class="sortable">Patron <span class="sort-icon"></span></th><th data-type="numeric" data-column="19" class="sortable">Team Power <span class="sort-icon"></span></th><th data-type="numeric" data-column="20" class="sortable">Boss Level <span class="sort-icon"></span></th><th data-type="numeric" data-column="21" class="sortable">Damage <span class="sort-icon"></span></th><th data-type="text" data-column="22" class="aux-col sortable">Buffs <span class="sort-icon"></span></th></tr>        </thead>
@@ -311,8 +310,8 @@
       sortOrder: urlParams.get('sortOrder'),
     }
 
-    const dataTable = document.getElementById('dataTable');
-    let showEval = !dataTable.classList.contains('hide-aux');
+    const reportData = document.getElementById('reportData');
+    let showEval = !reportData.classList.contains('hide-aux');
 
     function loadAndUpdateFormParams(itemName, updateParams = {}) {
       const item = sessionStorage.getItem(itemName);
@@ -426,9 +425,9 @@
         show = force;
 
       if (show)
-        dataTable.classList.remove('hide-aux');
+        reportData.classList.remove('hide-aux');
       else
-        dataTable.classList.add('hide-aux');
+        reportData.classList.add('hide-aux');
 
       showEval = show;
       if (saveParam)
@@ -490,7 +489,7 @@
         }
       }
 
-      const rows = [...dataTable.querySelectorAll('tbody tr')];
+      const rows = [...reportData.querySelectorAll('tbody tr')];
       let someHidden = false;
       rows.forEach(row => {
         let match = false;
@@ -519,7 +518,7 @@
         someHidden ||= !match;
       });
 
-      const tfoot = dataTable.querySelector('tfoot');
+      const tfoot = reportData.querySelector('tfoot');
       if (tfoot)
         tfoot.classList.toggle('hidden', someHidden);
       const comment = document.querySelector('.report-comment');
@@ -572,7 +571,7 @@
       const isNumeric = header.dataset.type !== 'text';
       const columnIndex = parseInt(header.dataset.column);
 
-      const tbody = dataTable.querySelector('tbody');
+      const tbody = reportData.querySelector('tbody');
       const rows = Array.from(tbody.querySelectorAll('tr'));
 
       sortableHeaders.forEach(header => header.classList.remove('sorted', 'asc', 'desc'));
@@ -621,7 +620,7 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      sortableHeaders = [...dataTable.querySelectorAll('table > thead > tr > th[data-column]')];
+      sortableHeaders = [...reportData.querySelectorAll('table > thead > tr > th[data-column]')];
       sortableHeaders.forEach(header => {
         header.classList.add('sortable');
         const sortButton = header.querySelector('span.sort-icon');

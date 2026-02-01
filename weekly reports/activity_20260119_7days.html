@@ -24,30 +24,23 @@
         overflow: visible;
         display: flex;
         flex-direction: column;
+        align-items: center;
       }
 
-         
       .report-header {
-        width: 100%;
         margin-bottom: 30px;
       }
 
       .report-title {
-        margin-left: auto;
-        margin-right: auto;
-        width: max-content;
         font-size: 24px;
         color: #2c3e50;
       }
 
       .report-info {
-        margin-left: auto;
-        margin-right: auto;
-        width: max-content;
         margin-bottom: 20px;
       }
 
-      .slide-details {
+      .report-info .slide-details {
         display: block;  
         width: max-content;
         align-self: flex-start;
@@ -55,21 +48,21 @@
         overflow: hidden;
       }
 
-      summary {
+      .report-info summary {
         padding: 0 15px;
         cursor: pointer;
         user-select: none; 
         -webkit-user-select: none;  
       }
 
-      .content {
+      .report-info .content {
         overflow: hidden;
         min-height: 0; 
         padding: 0 15px;
       }
 
        
-      .slide-details[open] .content {
+      .report-info .slide-details[open] .content {
         padding: 15px;
       }
 
@@ -95,8 +88,6 @@
       }
 
       .report-data table {
-        margin-left: auto;
-        margin-right: auto;
         width: max-content;
         background-color: #f2ead9;
       }

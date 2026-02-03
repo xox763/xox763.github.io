@@ -24397,17 +24397,21 @@
       document.querySelectorAll('.buff-icon').forEach(icon => {
         icon.addEventListener('mouseenter', (e) => {
           const tooltip = e.currentTarget.querySelector('.buff-tooltip');
-          const rect = tooltip.getBoundingClientRect();
+          const tooltipRect = tooltip.getBoundingClientRect();
           const tableRect = document.querySelector('#reportData table').getBoundingClientRect();
 
-          if (rect.right > tableRect.right) {
+          const overflowRight = tooltipRect.right - tableRect.right;
+          if (overflowRight > 0) {
+            const adjustment = overflowRight + 5; 
             tooltip.style.left = 'auto';
             tooltip.style.right = '0';
-            tooltip.style.transform = 'translateX(0)';
+            tooltip.style.transform = `translateX(calc(-50% - ${adjustment}px))`;
           }
-          if (rect.left < tableRect.left) {
+          const overflowLeft = tooltipRect.left - tableRect.left;
+          if (overflowLeft > 0) {
+            const adjustment = overflowLeft + 5; 
             tooltip.style.left = '0';
-            tooltip.style.transform = 'translateX(0)';
+            tooltip.style.transform = `translateX(calc(-50% + ${adjustment}px))`;
           }
         });
       });

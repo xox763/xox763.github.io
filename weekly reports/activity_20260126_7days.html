@@ -1,0 +1,741 @@
+<html><head>
+
+
+    <base target="_top">
+    <meta charset="UTF-8">
+    <style>
+
+      body {
+          font-family: sans-serif;
+          margin: 10px;
+          background-color: #f4f4f4;
+          color: #333;
+          padding-top: 20px;
+          padding-bottom: 20px;
+      }
+
+      table {
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+
+      .report-wrapper {
+        width: 100%;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .report-header {
+        margin-bottom: 30px;
+      }
+
+      .report-title {
+        font-size: 24px;
+        color: #2c3e50;
+      }
+
+      .report-info {
+        margin-bottom: 20px;
+      }
+
+      .report-info .slide-details {
+        display: block;  
+        width: max-content;
+        align-self: flex-start;
+        margin-left: 0;
+        overflow: hidden;
+      }
+
+      .report-info summary {
+        padding: 0 15px;
+        cursor: pointer;
+        user-select: none; 
+        -webkit-user-select: none;  
+      }
+
+      .report-info .content {
+        overflow: hidden;
+        min-height: 0; 
+        padding: 0 15px;
+      }
+
+       
+      .report-info .slide-details[open] .content {
+        padding: 15px;
+      }
+
+      .report-info table {
+        border: 1px solid #f0d493;
+        box-shadow: 0 0 0 1px #f0d493, 0 3px 10px rgba(192, 170, 129, 0.2);
+      }
+
+      .report-info td {
+        padding: 5px 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+        background-color: #f2ead9;
+      }
+
+      .report-info td:nth-child(n + 2) {
+        text-align: right;
+        background-color: #f3efe7;
+      }
+
+      .report-data {
+        contain: content;
+          
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .report-data table {
+        width: max-content;
+        background-color: #f2ead9;
+      }
+
+      .report-data thead th, .report-data tfoot td {
+        width: 0;
+        background-color: #3783af;
+        color: white;
+        padding: 5px 10px;
+        border: 1px solid #2d6a8a;
+      }
+
+      .report-data tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      .report-data td {
+        white-space: nowrap;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        text-align: right;
+      }
+
+      .report-data td:first-child {
+        text-align: left;
+        font-weight: bold;
+        min-width: 120px;
+      }
+
+      .report-data .aux-col {
+        display: table-cell;
+      }
+
+      .report-data.hide-aux .aux-col {
+        display: none;
+      }
+
+      .sort-icon {
+        display: inline-block;
+        margin-top: 6px;
+        margin-left: 8px;
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid #ccc;
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.2s;
+      }
+
+      th:hover .sort-icon {
+        opacity: 1;
+        cursor: pointer;
+      }
+
+      th.sorted .sort-icon {
+        opacity: 1;
+      }
+
+      th.asc .sort-icon {
+        border-bottom-color: #333;
+        transform: rotate(0deg);
+      }
+
+      th.desc .sort-icon {
+        border-bottom-color: #333;
+        transform: rotate(180deg);
+      }
+
+      .eval-zero { color: red; background-color: #ffd2d260; }
+      .eval-very-low { color: red; background-color: #ffd2d260; }
+      .eval-low { background-color: #ffd2d238; }
+      .eval-active {}
+      .eval-super-active { background-color: #cfeecfA0; color: #1a5e1a; font-weight: bold; }
+
+      .report-comment {
+        width: 100%;
+        margin: 0;
+        padding: 4px;
+        border-radius: 6px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        font-family: sans-serif;
+        font-size: 13px;
+      }
+
+      .report-comment ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .report-comment li {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+        line-height: 1.2;
+        color: #555;
+      }
+
+      .report-comment li:last-child {
+        border-bottom: none;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      td.left-align {
+        text-align: left;
+      }
+
+      button {
+        background-color: #485c83;
+        color: white;
+        padding: 8px 13px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #68AcA3;
+      }
+
+       
+      button:disabled {
+        cursor: default;
+        color: #f1f1f1;             
+        background-color: #a5adba;  
+        opacity: 0.7;               
+      }
+
+       
+      button:disabled:hover {
+        background-color: #a5adba;  
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+      }
+
+    </style>
+
+      </head>
+<body>
+  
+  
+  
+
+  
+    
+
+  <div class="report-wrapper">
+    <div class="report-header">
+      <h1 class="report-title">Weekly Guild Activity Report</h1>
+    </div>
+
+    <div class="report-info">
+      <details id="dataOverview" class="slide-details" open="">
+        <summary>Overview</summary>
+        <div class="content">
+          <table>
+                          <tbody><tr>
+                <td>Start Date</td>
+                <td>2026-01-26</td>
+              </tr>
+                          <tr>
+                <td>End Date</td>
+                <td>2026-02-01</td>
+              </tr>
+                          <tr>
+                <td>Duration</td>
+                <td>7 days</td>
+              </tr>
+                          <tr>
+                <td>File Name</td>
+                <td>activity_20260126_7days.html</td>
+              </tr>
+                          <tr>
+                <td>Guild Name</td>
+                <td>XoX Server 469</td>
+              </tr>
+                          <tr>
+                <td>Guild Prestige Progress</td>
+                <td>1,002,090</td>
+              </tr>
+                          <tr>
+                <td>Estimated Final Guild Prestige</td>
+                <td>64</td>
+              </tr>
+                          <tr>
+                <td>Guild War - League</td>
+                <td>Gold League</td>
+              </tr>
+                          <tr>
+                <td>Guild War - Rank</td>
+                <td>1</td>
+              </tr>
+                          <tr>
+                <td>Guild War - Score</td>
+                <td>5,220</td>
+              </tr>
+                          <tr>
+                <td>Clash of Worlds - League</td>
+                <td>Earl League</td>
+              </tr>
+                          <tr>
+                <td>Clash of Worlds - Division</td>
+                <td>4</td>
+              </tr>
+                          <tr>
+                <td>Clash of Worlds - Score</td>
+                <td>5,977</td>
+              </tr>
+                          <tr>
+                <td>Raid - Type</td>
+                <td>The Phantom Orchestra</td>
+              </tr>
+                          <tr>
+                <td>Raid - Max Level Killed</td>
+                <td>130</td>
+              </tr>
+                          <tr>
+                <td>Raid - Guild Morale</td>
+                <td>13,700</td>
+              </tr>
+                          <tr>
+                <td>Raid - Total Boss Damage</td>
+                <td>229,575,284</td>
+              </tr>
+                          <tr>
+                <td>Raid - Total Boss Attacks</td>
+                <td>130</td>
+              </tr>
+                      </tbody></table>
+        </div>
+      </details>
+    </div>
+
+    <div id="reportData" class="report-data hide-aux">
+
+      <table>
+        <thead>
+          <tr><th rowspan="2" data-type="text" data-column="0" class="sortable">Name <span class="sort-icon"></span></th><th rowspan="2" data-type="numeric" data-column="1" class="sortable">Days <span class="sort-icon"></span></th><th colspan="4">Daily Activities</th><th>GW</th><th colspan="2">Clash of Worlds</th><th colspan="4">Raid</th><th colspan="2" class="aux-col">Evaluation &amp; Rewards</th></tr><tr><th data-type="numeric" data-column="2" class="sortable">Titanite <span class="sort-icon"></span></th><th data-type="numeric" data-column="3" class="sortable">Activity <span class="sort-icon"></span></th><th data-type="numeric" data-column="4" class="sortable">Guild Prestige <span class="sort-icon"></span></th><th data-type="numeric" data-column="5" class="sortable">Adventure <span class="sort-icon"></span></th><th data-type="numeric" data-column="6" class="sortable">Guild War <span class="sort-icon"></span></th><th data-type="numeric" data-column="7" class="sortable">Hero <span class="sort-icon"></span></th><th data-type="numeric" data-column="8" class="sortable">Titan <span class="sort-icon"></span></th><th data-type="numeric" data-column="9" class="sortable">Minions <span class="sort-icon"></span></th><th data-type="numeric" data-column="10" class="sortable">Morale <span class="sort-icon"></span></th><th data-type="numeric" data-column="11" class="sortable">Boss <span class="sort-icon"></span></th><th data-type="numeric" data-column="12" class="sortable">Damage <span class="sort-icon"></span></th><th data-type="numeric" data-column="13" class="aux-col sortable">Evaluation Index <span class="sort-icon"></span></th><th data-type="numeric" data-column="14" class="aux-col sortable">Present <span class="sort-icon"></span></th></tr>        </thead>
+                <tbody>
+          <tr><td>Al Kijan</td><td>7</td><td>838</td><td>7,618</td><td>27.5K</td><td>11</td><td>2/10</td><td>3</td><td>2</td><td>9</td><td>428</td><td>5</td><td>2.8M</td><td class="eval-active aux-col">73.9</td><td class="aux-col">2</td></tr><tr><td>Anophelus</td><td>7</td><td>6,174</td><td>69.6K</td><td>35.0K</td><td>14</td><td>8/10</td><td>3</td><td>2</td><td>9</td><td>650</td><td>5</td><td>45.1M</td><td class="eval-super-active aux-col">195.3</td><td class="aux-col">5</td></tr><tr><td>BOWMORE</td><td>7</td><td>1,905</td><td>28.5K</td><td>31.8K</td><td>15</td><td>7/10</td><td>4</td><td>3</td><td>9</td><td>611</td><td>5</td><td>13.2M</td><td class="eval-active aux-col">122.7</td><td class="aux-col">3</td></tr><tr><td>Esi Gorg</td><td>7</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>-</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero aux-col">0</td><td class="aux-col">0</td></tr><tr><td>Flydman</td><td>7</td><td>3,348</td><td>18.6K</td><td>22.6K</td><td>9</td><td>-</td><td>3</td><td class="eval-zero">0</td><td>9</td><td>597</td><td>5</td><td>4.1M</td><td class="eval-active aux-col">88.4</td><td class="aux-col">2</td></tr><tr><td>Gangsteris</td><td>7</td><td>915</td><td>23.3K</td><td>26.4K</td><td>14</td><td>-</td><td class="eval-zero">0</td><td>1</td><td>9</td><td>251</td><td>5</td><td>782.8K</td><td class="eval-active aux-col">76.5</td><td class="aux-col">2</td></tr><tr><td>Ihg</td><td>6</td><td>2,678</td><td>36.3K</td><td>28.3K</td><td>11</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>25.9M</td><td class="eval-active aux-col">138.4</td><td class="aux-col">3</td></tr><tr><td>Joe Black</td><td>7</td><td>1,313</td><td>18.3K</td><td>25.7K</td><td>13</td><td>6/10</td><td>5</td><td>4</td><td>9</td><td>466</td><td>5</td><td>6.3M</td><td class="eval-active aux-col">98.5</td><td class="aux-col">3</td></tr><tr><td>Kajrilisar</td><td>7</td><td>3,465</td><td>35.7K</td><td>28.4K</td><td>9</td><td>8/10</td><td>1</td><td>2</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>5</td><td>1.6M</td><td class="eval-active aux-col">115.4</td><td class="aux-col">3</td></tr><tr><td>Kanibalas</td><td>7</td><td>915</td><td>20.8K</td><td>25.6K</td><td>14</td><td>-</td><td>1</td><td class="eval-zero">0</td><td>9</td><td>189</td><td>5</td><td>421.9K</td><td class="eval-active aux-col">73.2</td><td class="aux-col">2</td></tr><tr><td>Kebabas</td><td>7</td><td>915</td><td>20.5K</td><td>26.1K</td><td>14</td><td>-</td><td>1</td><td class="eval-zero">0</td><td>9</td><td>279</td><td>5</td><td>533.2K</td><td class="eval-active aux-col">73.2</td><td class="aux-col">2</td></tr><tr><td>Kolm</td><td>7</td><td>1,099</td><td>46.4K</td><td>30.1K</td><td>14</td><td>10/10</td><td>3</td><td>2</td><td>9</td><td>650</td><td>5</td><td>11.3M</td><td class="eval-active aux-col">125.9</td><td class="aux-col">3</td></tr><tr><td>lULU</td><td>7</td><td>2,535</td><td>41.7K</td><td>27.4K</td><td>14</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>574</td><td>5</td><td>7.5M</td><td class="eval-active aux-col">139.5</td><td class="aux-col">3</td></tr><tr><td>Mai.469</td><td>7</td><td>450</td><td>31.2K</td><td>12.3K</td><td class="eval-zero">0</td><td>-</td><td>3</td><td>2</td><td>9</td><td>604</td><td>5</td><td>2.9M</td><td class="eval-active aux-col">39.8</td><td class="aux-col">1</td></tr><tr><td>Mar</td><td>7</td><td>4,034</td><td>53.5K</td><td>32.5K</td><td>15</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>12.9M</td><td class="eval-active aux-col">160.2</td><td class="aux-col">4</td></tr><tr><td>mo-mo</td><td>7</td><td>1,155</td><td>50.2K</td><td>32.1K</td><td>14</td><td>10/10</td><td>5</td><td>4</td><td>9</td><td>650</td><td>5</td><td>13.3M</td><td class="eval-active aux-col">135.5</td><td class="aux-col">3</td></tr><tr><td>Moto</td><td>7</td><td>525</td><td>9,120</td><td>15.1K</td><td class="eval-zero">0</td><td>-</td><td>6</td><td>4</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td>5</td><td>1.1M</td><td class="eval-active aux-col">46.7</td><td class="aux-col">1</td></tr><tr><td>Numencito</td><td>7</td><td>690</td><td>26.1K</td><td>24.1K</td><td>6</td><td>10/10</td><td>3</td><td>2</td><td>9</td><td>650</td><td>5</td><td>9.1M</td><td class="eval-active aux-col">95.2</td><td class="aux-col">3</td></tr><tr><td>Ralfda1derLlama</td><td>7</td><td>4,005</td><td>30.2K</td><td>26.9K</td><td>14</td><td>10/10</td><td>4</td><td>4</td><td>9</td><td>975</td><td>5</td><td>17.6M</td><td class="eval-active aux-col">158.8</td><td class="aux-col">4</td></tr><tr><td>Random</td><td>7</td><td>2,949</td><td>157.4K</td><td>26.6K</td><td>12</td><td>10/10</td><td>3</td><td>2</td><td>9</td><td>574</td><td>5</td><td>3.2M</td><td class="eval-active aux-col">163.9</td><td class="aux-col">4</td></tr><tr><td>Reikachan</td><td>7</td><td>2,175</td><td>21.1K</td><td>30.2K</td><td>13</td><td>4/10</td><td>2</td><td>2</td><td>9</td><td>650</td><td>5</td><td>2.2M</td><td class="eval-active aux-col">96.4</td><td class="aux-col">3</td></tr><tr><td>Sam 81</td><td>7</td><td>1,015</td><td>48.7K</td><td>31.1K</td><td>11</td><td>10/10</td><td>3</td><td>2</td><td>9</td><td>574</td><td>5</td><td>16.1M</td><td class="eval-active aux-col">120.9</td><td class="aux-col">3</td></tr><tr><td>SodCheun</td><td>7</td><td>1,995</td><td>60.9K</td><td>26.4K</td><td>9</td><td>6/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>5.5M</td><td class="eval-active aux-col">115.3</td><td class="aux-col">3</td></tr><tr><td>Team 2PFF</td><td>7</td><td>840</td><td>20.0K</td><td>25.4K</td><td>10</td><td>-</td><td>3</td><td>2</td><td>9</td><td>584</td><td>5</td><td>3.1M</td><td class="eval-active aux-col">74.2</td><td class="aux-col">2</td></tr><tr><td>Valerix</td><td>7</td><td>1,025</td><td>66.2K</td><td>22.7K</td><td>8</td><td>4/10</td><td>3</td><td>2</td><td>6</td><td>494</td><td>5</td><td>1.8M</td><td class="eval-active aux-col">79.9</td><td class="aux-col">2</td></tr><tr><td>Vistro</td><td>7</td><td>1,400</td><td>24.4K</td><td>26.8K</td><td>13</td><td>10/10</td><td>3</td><td>3</td><td>9</td><td>650</td><td>5</td><td>2.5M</td><td class="eval-active aux-col">110.7</td><td class="aux-col">3</td></tr><tr><td>Yorisar</td><td>7</td><td>3,370</td><td>93.0K</td><td>32.3K</td><td>14</td><td>10/10</td><td>6</td><td>4</td><td>9</td><td>650</td><td>5</td><td>18.8M</td><td class="eval-super-active aux-col">180.4</td><td class="aux-col">5</td></tr><tr><td>ZED</td><td>7</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0/10</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero">0</td><td class="eval-zero aux-col">0</td><td class="aux-col">0</td></tr>        </tbody>
+                        <tfoot>
+          <tr><td>TOTAL</td><td>195</td><td>51.7K</td><td>1.1M</td><td>699.6K</td><td>291</td><td>155/200</td><td>92</td><td>65</td><td>213</td><td>13.7K</td><td>130</td><td>229.6M</td><td class="aux-col">2,898.8</td><td class="aux-col">74</td></tr><tr><td>AVERAGE</td><td>7</td><td>1,847.4</td><td>37.8K</td><td>25.0K</td><td>10.4</td><td>7.8/7.1</td><td>3.3</td><td>2.3</td><td>7.6</td><td>489.3</td><td>4.6</td><td>8.2M</td><td class="aux-col">103.5</td><td class="aux-col">2.6</td></tr>        </tfoot>
+              </table>
+
+              <div class="report-comment">
+          <ul>
+                          <li>
+                <span style="color: #ff5733;">*</span> Team Veggie was kicked on 2026-01-30 (Friday). Expelled due to long-term inactivity.              </li>
+                      </ul>
+        </div>
+      
+    </div>
+  </div>
+
+  <script>
+    
+    const config = {
+      viewerParamsName: 'viewer_params',
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const docParams = {
+      showEval: urlParams.get('showEval'),
+      searchKeyword: urlParams.get('search'),
+      sortColumn: urlParams.get('sortColumn'),
+      sortOrder: urlParams.get('sortOrder'),
+    }
+
+    const reportData = document.getElementById('reportData');
+    let showAux = !reportData.classList.contains('hide-aux');
+
+    function loadAndUpdateFormParams(itemName, updateParams = {}) {
+      const item = sessionStorage.getItem(itemName);
+      let params;
+      if (item) {
+        params = JSON.parse(item);
+      }
+      else {
+        params = {};
+      }
+
+      
+      let isUpdated = false;
+      for (const [key, value] of Object.entries(updateParams)) {
+        if (params[key] !== value) {
+          params[key] = value;
+          isUpdated = true;
+        }
+      }
+
+      if (isUpdated) {
+        saveFormParams(params, itemName);
+      }
+
+      return params;
+    }
+
+    function saveFormParams(params, itemName) {
+      sessionStorage.setItem(itemName, JSON.stringify(params));
+    }
+
+    function saveViewerParam(key, value) {
+      loadAndUpdateFormParams(config.viewerParamsName, {[key]: value});
+    }
+
+    function applyViewerParams(params) {
+      if (!params) return;
+      if (params.showEval != null) {
+        toggleEvaluation(params.showEval);
+      }
+      if (params.searchKeyword != null) {
+        applySearchFilter(params.searchKeyword);
+      }
+      if (params.sortColumn != null) {
+        sort(params.sortColumn, params.sortOrder);
+      }
+    }
+
+    const DATA_VALUE_REGEX = /(?:^\-?$)|^([+-]?\d+)(?:,(\d{3}))*(\.\d*)?(K|M|B|T)?(?:(\/)([+-]?\d+)(?:,(\d{3}))*(\.\d*)?(K|M|B|T)?)?$/;
+
+    function parseNullable(value, unit) {
+      if (value != null && value !== '') {
+        const a= parseFloat(value) * unit;
+        return a;
+      }
+      return null;
+    }
+
+    function parseValue(value) {
+      const matches = value.match(DATA_VALUE_REGEX);
+      const idx = matches.indexOf('/');
+      const unit = [1, 1];
+      if (matches) {
+        matches.forEach((str, i) => {
+          const uidx = (idx === -1 || i < idx) ? 0 : 1;
+          if (str === 'K')
+            [unit[uidx], matches[i]] = [1000, ''];
+          else if (str === 'M')
+            [unit[uidx], matches[i]] = [1000000, ''];
+          else if (str === 'B')
+            [unit[uidx], matches[i]] = [1000000000, ''];
+          else if (str === 'T')
+            [unit[uidx], matches[i]] = [1000000000000, ''];
+        })
+        if (idx === -1)
+          return parseNullable(matches.slice(1).join(''), unit[0]);
+        return [parseNullable(matches.slice(1, idx).join(''), unit[0]), parseNullable(matches.slice(idx + 1).join(''), unit[1])];
+      }
+    }
+
+    function compval(a, b, isAsc) {
+      if (a === b)
+        return 0;
+      if (a === null)
+        return 1;
+      else if (b === null)
+        return -1;
+      return isAsc ? (a - b) : (b - a);
+    }
+
+    function compareNumericValues(a, b, isAsc) {
+      let va = parseValue(a);
+      let vb = parseValue(b);
+      if (Array.isArray(va) && Array.isArray(vb)) {
+        let fc = compval(va[0], vb[0], isAsc);
+        if (!fc)
+          fc = compval(va[1], vb[1], isAsc);
+        return fc;
+      } else {
+        va = Array.isArray(va) ? va[0] : va;
+        vb = Array.isArray(vb) ? vb[0] : vb;
+      }
+      return compval(va, vb, isAsc);
+    }
+
+    function toggleEvaluation(force = null, saveParam = false) {
+      let show;
+      if (force == null)
+        show = !showAux;
+      else
+        show = force;
+
+      if (show)
+        reportData.classList.remove('hide-aux');
+      else
+        reportData.classList.add('hide-aux');
+
+      showAux = show;
+      if (saveParam)
+        saveViewerParam('showEval', show);
+    }
+
+    const searchCommandRegex = /^@(\w*)(<=|>=|<>|<|>|=)([^<>=].*)$/;
+
+    function applySearchFilter(searchKeyword, saveParam = false) {
+      const term = searchKeyword.toLowerCase();
+      let columnIndex = null;
+      let operator = null;
+      let logic = 'some';
+
+      const match = searchKeyword.match(searchCommandRegex);
+      if (match) {
+        const column = match[1].trim();
+        if (column) {
+          const header = findHeader(column);
+          if (header == null) return; 
+          columnIndex = parseInt(header.dataset.column);
+        }
+
+        const op = match[2];
+        let operand = match[3].trim();
+        if (!operand) return; 
+        if (operand === '-') {
+          operand = null;
+        } else if (columnIndex > 0) {
+          if (isNaN(operand))
+            return; 
+        }
+        switch (op) {
+          case '<=':
+            operator = operand != null ? (v => v !== null && v <= operand) : (v => false);
+            break;
+          case '>=':
+            operator = operand != null ? (v => v !== null && v >= operand) : (v => false);
+            break;
+          case '<':
+            operator = operand != null ? (v => v !== null && v < operand) : (v => false);
+            break;
+          case '>':
+            operator = operand != null ? (v => v !== null && v > operand) : (v => false);
+            break;
+          case '=':
+            operator = operand != null ? (v => v !== null && v == operand) : (v => v === null);
+            break;
+          case '<>':
+            operator = operand != null ? (v => v === null || v != operand) : (v => v !== null);
+            logic = 'every';
+            break;
+        }
+      } else {
+        if (searchKeyword) {
+          if (searchKeyword.startsWith('@')) return; 
+          columnIndex = 0;
+          operator = v => v.toLowerCase().includes(term);
+        }
+      }
+
+      const rows = [...reportData.querySelectorAll('tbody tr')];
+      let someHidden = false;
+      rows.forEach(row => {
+        let match = false;
+        if (operator == null) {
+          match = true;
+        } else if (columnIndex == null) {
+
+          match = [...row.cells][logic]((cell, idx) => {
+            let value = cell.textContent;
+            if (idx > 0) {
+              value = parseValue(value);
+              value = Array.isArray(value) ? value[0] : value;
+            }
+            return operator(value);
+          });
+        } else {
+          let value = row.cells[columnIndex].textContent;
+          if (columnIndex > 0) {
+            value = parseValue(value);
+            value = Array.isArray(value) ? value[0] : value;
+          } else
+            value = value.toLowerCase();
+          match = operator(value);
+        }
+        row.classList.toggle('hidden', !match);
+        someHidden ||= !match;
+      });
+
+      const tfoot = reportData.querySelector('tfoot');
+      if (tfoot)
+        tfoot.classList.toggle('hidden', someHidden);
+      const comment = document.querySelector('.report-comment');
+      if (comment)
+        comment.classList.toggle('hidden', someHidden);
+
+      if (saveParam) {
+        saveViewerParam('searchKeyword', searchKeyword);
+      }
+    }
+
+    let sortableHeaders = null;
+
+    function findHeader(columnSpec) {
+      
+      let header = null;
+      let searchTerm = null;
+      if (!isNaN(columnSpec)) {
+        searchTerm = columnSpec.toString();
+        header = sortableHeaders.find(th => 
+          th.dataset.column === searchTerm
+        );
+        if (header) return header;
+      } else {
+        searchTerm = columnSpec.trim().toLowerCase();
+      }
+
+      
+      return sortableHeaders.reduce((prev, th) => {
+        const headerName = th.textContent.trim().toLowerCase();
+        if (headerName.startsWith(searchTerm)) {
+          if (!prev || headerName.length < prev[1].length)
+            return [th, headerName];
+        }
+        return prev;
+      }, null)?.[0] || null;
+    }
+
+    function sort(header, order = null, saveParam = false) {
+      if (!sortableHeaders) return;
+      if (!(header instanceof HTMLElement)) {
+        header = findHeader(header);
+        if (!header) return;
+      }
+
+      if (order == null) {
+        order = (header.classList.contains('sorted') && header.classList.contains('asc')) ? 'desc' : 'asc';
+      }
+      const isAsc = order === 'asc';
+      const isNumeric = header.dataset.type === 'numeric';
+      const columnIndex = parseInt(header.dataset.column);
+
+      const tbody = reportData.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+
+      sortableHeaders.forEach(header => header.classList.remove('sorted', 'asc', 'desc'));
+      header.classList.add('sorted', order);
+
+      const fragment = document.createDocumentFragment();
+      rows.sort((a, b) => {
+        const aValue = a.cells[columnIndex].textContent;
+        const bValue = b.cells[columnIndex].textContent;
+        
+        let compareResult;
+        if (isNumeric) {
+          compareResult = compareNumericValues(aValue, bValue, isAsc);
+        } else {
+          compareResult = aValue.localeCompare(bValue);
+          if (!isAsc)
+            compareResult = -compareResult;
+        }
+
+        return compareResult;
+      });
+      rows.forEach(row => fragment.appendChild(row));
+      tbody.appendChild(fragment);
+
+      if (saveParam) {
+        const column = parseInt(header.dataset.column);
+        saveViewerParam('sortColumn', column);
+        saveViewerParam('sortOrder', order);
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      
+      if ((e.keyCode === 86 || e.key === 'v' || e.key === 'V')
+        && e.ctrlKey && e.shiftKey && e.altKey) {
+        e.preventDefault();
+
+        if (window.parent && window.parent !== window && typeof window.parent.toggleEvaluation === 'function') {
+          
+          window.parent.toggleEvaluation(!showAux, true);
+        } else {
+          
+          toggleEvaluation(null, true);
+        }
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      sortableHeaders = [...reportData.querySelectorAll('table > thead > tr > th[data-column]')]
+        .filter(header => header.dataset.type === 'text' || header.dataset.type === 'numeric');
+
+      sortableHeaders.forEach(header => {
+        header.classList.add('sortable');
+        const sortButton = header.querySelector('span.sort-icon');
+        sortButton.addEventListener('click', () => {
+          const order = (header.classList.contains('sorted') && header.classList.contains('asc')) ? 'desc' : 'asc';
+          if (window.parent && window.parent !== window && typeof window.parent.sort === 'function') {
+            
+            window.parent.sort(header, order, true);
+          } else {
+            
+            sort(header, order, true); 
+          }
+        });
+      });
+
+      const reportDataTable = reportData.querySelector('table');
+      reportDataTable.addEventListener('mouseenter', (e) => {
+        if (e.target.classList.contains('buff-icon')) {
+          const tooltip = e.target.querySelector('.buff-tooltip');
+          if (!tooltip) return;
+
+          const tooltipRect = tooltip.getBoundingClientRect();
+          const tableRect = reportDataTable.getBoundingClientRect();
+
+          const overflowRight = tooltipRect.right - tableRect.right;
+          if (overflowRight > 0) {
+             
+            const adjustment = overflowRight + 5; 
+            tooltip.style.transform = `translateX(calc(-50% - ${adjustment}px))`;
+          } else {
+            const overflowLeft = tableRect.left - tooltipRect.left;
+            if (overflowLeft > 0) {
+               
+              const adjustment = overflowLeft + 5; 
+              tooltip.style.transform = `translateX(calc(-50% + ${adjustment}px))`;
+            } else {
+              tooltip.style.transform = 'translateX(-50%)';
+            }
+          }
+        }
+      }, true);
+
+      const params = loadAndUpdateFormParams(config.viewerParamsName);
+      docParams.showEval ??= params.showEval ?? null;
+      docParams.searchKeyword ??= params.searchKeyword ?? null;
+      docParams.sortColumn ??= params.sortColumn ?? null;
+      docParams.sortOrder ??= params.sortOrder ?? null;
+
+      applyViewerParams(docParams);
+
+      if (typeof autoPublish !== 'undefined' && autoPublish) {
+        const button = document.getElementById("publish");
+        button.click();
+      }
+    });
+  </script>
+
+
+</body></html>

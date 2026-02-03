@@ -288,7 +288,7 @@
       </div>
 
       <div class="control-group">
-        <label for="evaluationToggle">Show Evaluation:</label>
+        <label for="evaluationToggle">Display Auxiliary Data:</label>
         <label class="toggle-switch">
           <input type="checkbox" id="evaluationToggle">
           <span class="slider"></span>
@@ -586,15 +586,15 @@
       }
     }
 
-    function toggleEvaluation(showEval = null, forwarded = false) {
+    function toggleEvaluation(showAux = null, forwarded = false) {
       try {
         if (forwarded) {
-          if (showEval == null)
-            showEval = !evaluationToggle.checked;
-          evaluationToggle.checked = showEval;
+          if (showAux == null)
+            showAux = !evaluationToggle.checked;
+          evaluationToggle.checked = showAux;
         }
         if (documentFrame && documentFrame.contentWindow && typeof documentFrame.contentWindow.toggleEvaluation === 'function')
-          documentFrame.contentWindow.toggleEvaluation(showEval, forwarded);
+          documentFrame.contentWindow.toggleEvaluation(showAux, forwarded);
       } catch (err) {
         console.error("Access denied or function not found:", err);
       }
@@ -641,11 +641,11 @@
 
     // Handle evaluation toggle
     evaluationToggle.addEventListener('change', (e) => {
-      const showEval = e.target.checked;
+      const showAux = e.target.checked;
       if (e.isTrusted)
-        saveViewerParam('showEval', showEval);
+        saveViewerParam('showEval', showAux);
 
-      toggleEvaluation(showEval);
+      toggleEvaluation(showAux);
     });
 
     // Handle search filter

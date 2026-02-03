@@ -24406,12 +24406,15 @@
             tooltip.style.left = 'auto';
             tooltip.style.right = '0';
             tooltip.style.transform = `translateX(calc(-50% - ${adjustment}px))`;
-          }
-          const overflowLeft = tooltipRect.left - tableRect.left;
-          if (overflowLeft > 0) {
-            const adjustment = overflowLeft + 5; 
-            tooltip.style.left = '0';
-            tooltip.style.transform = `translateX(calc(-50% + ${adjustment}px))`;
+          } else {
+            const overflowLeft = tooltipRect.left - tableRect.left;
+            if (overflowLeft > 0) {
+              const adjustment = overflowLeft + 5; 
+              tooltip.style.left = '0';
+              tooltip.style.transform = `translateX(calc(-50% + ${adjustment}px))`;
+            } else {
+              tooltip.style.transform = 'translateX(-50%)';
+            }
           }
         });
       });

@@ -198,6 +198,10 @@
         display: none;
       }
 
+      td.left-align {
+        text-align: left;
+      }
+
       button {
         background-color: #485c83;
         color: white;
@@ -231,7 +235,8 @@
       }
 
     </style>
-</head>
+
+      </head>
 <body>
   
   
@@ -363,7 +368,7 @@
     }
 
     const reportData = document.getElementById('reportData');
-    let showEval = !reportData.classList.contains('hide-aux');
+    let showAux = !reportData.classList.contains('hide-aux');
 
     function loadAndUpdateFormParams(itemName, updateParams = {}) {
       const item = sessionStorage.getItem(itemName);
@@ -472,7 +477,7 @@
     function toggleEvaluation(force = null, saveParam = false) {
       let show;
       if (force == null)
-        show = !showEval;
+        show = !showAux;
       else
         show = force;
 
@@ -481,7 +486,7 @@
       else
         reportData.classList.add('hide-aux');
 
-      showEval = show;
+      showAux = show;
       if (saveParam)
         saveViewerParam('showEval', show);
     }
@@ -620,7 +625,7 @@
         order = (header.classList.contains('sorted') && header.classList.contains('asc')) ? 'desc' : 'asc';
       }
       const isAsc = order === 'asc';
-      const isNumeric = header.dataset.type !== 'text';
+      const isNumeric = header.dataset.type === 'numeric';
       const columnIndex = parseInt(header.dataset.column);
 
       const tbody = reportData.querySelector('tbody');
@@ -663,7 +668,7 @@
 
         if (window.parent && window.parent !== window && typeof window.parent.toggleEvaluation === 'function') {
           
-          window.parent.toggleEvaluation(!showEval, true);
+          window.parent.toggleEvaluation(!showAux, true);
         } else {
           
           toggleEvaluation(null, true);
@@ -672,7 +677,9 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      sortableHeaders = [...reportData.querySelectorAll('table > thead > tr > th[data-column]')];
+      sortableHeaders = [...reportData.querySelectorAll('table > thead > tr > th[data-column]')]
+        .filter(header => header.dataset.type === 'text' || header.dataset.type === 'numeric');
+
       sortableHeaders.forEach(header => {
         header.classList.add('sortable');
         const sortButton = header.querySelector('span.sort-icon');
@@ -687,6 +694,33 @@
           }
         });
       });
+
+      const reportDataTable = reportData.querySelector('table');
+      reportDataTable.addEventListener('mouseenter', (e) => {
+        if (e.target.classList.contains('buff-icon')) {
+          const tooltip = e.target.querySelector('.buff-tooltip');
+          if (!tooltip) return;
+
+          const tooltipRect = tooltip.getBoundingClientRect();
+          const tableRect = reportDataTable.getBoundingClientRect();
+
+          const overflowRight = tooltipRect.right - tableRect.right;
+          if (overflowRight > 0) {
+             
+            const adjustment = overflowRight + 5; 
+            tooltip.style.transform = `translateX(calc(-50% - ${adjustment}px))`;
+          } else {
+            const overflowLeft = tableRect.left - tooltipRect.left;
+            if (overflowLeft > 0) {
+               
+              const adjustment = overflowLeft + 5; 
+              tooltip.style.transform = `translateX(calc(-50% + ${adjustment}px))`;
+            } else {
+              tooltip.style.transform = 'translateX(-50%)';
+            }
+          }
+        }
+      }, true);
 
       const params = loadAndUpdateFormParams(config.viewerParamsName);
       docParams.showEval ??= params.showEval ?? null;
